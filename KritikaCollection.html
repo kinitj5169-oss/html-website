@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kritika Collection</title>
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    scroll-behavior:smooth;
+}
+body{
+    background:#0a0a0a;
+    color:white;
+    overflow-x:hidden;
+}
+.announcement-bar {
+    background: linear-gradient(90deg, orange, #ff5ca8);
+    color: white;
+    text-align: center;
+    padding: 6px 10px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 101;
+}
+nav{
+    position:fixed;
+    top:29px; 
+    width:100%;
+    padding:18px 50px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(0,0,0,.75);
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+    z-index:100;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.logo{
+    font-size:30px;
+    font-weight:700;
+    background: linear-gradient(90deg, #ff5ca8, gold);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color: transparent;
+    color:transparent;
+}
+nav ul{
+    display:flex;
+    gap:25px;
+    list-style:none;
+}
+nav a{
+    color:white;
+    text-decoration:none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+nav a:hover {
+    color: #ff5ca8;
+}
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.wishlist {
+    cursor: pointer;
+    font-size: 20px;
+    transition: transform 0.2s;
+    user-select: none;
+}
+.wishlist:hover {
+    transform: scale(1.2);
+}
+.cart{
+    background:#ff5ca8;
+    padding:10px 18px;
+    border-radius:30px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.2s;
+    user-select: none;
+}
+.cart:hover {
+    background: #ff3393;
+    transform: scale(1.05);
+}
+.cart:active {
+    transform: scale(0.95);
+}
+.login-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.4);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+.login-btn:hover {
+    background: white;
+    color: black;
+    border-color: white;
+}
+.hero{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    min-height:100vh;
+    padding:160px 80px 60px 80px;
+    align-items:center;
+    gap: 40px;
+}
+.hero h1{
+    font-size:75px;
+    line-height:1.1;
+    margin-bottom: 10px;
+}
+.hero span{
+    color:#ff73ba;
+    background: linear-gradient(45deg, #ff5ca8, #ffb300);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.hero p{
+    font-size:22px;
+    margin:20px 0;
+    color:#bbb;
+    letter-spacing: 1px;
+}
+.btn{
+    padding:14px 28px;
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+    background: linear-gradient(90deg, #ff5ca8, orange);
+    color:white;
+    font-weight: 600;
+    margin-right:10px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 92, 168, 0.4);
+}
+.search{
+    margin-top:35px;
+}
+.search input{
+    width:350px;
+    padding:15px 25px;
+    border: 1px solid #333;
+    background: #111;
+    color: white;
+    border-radius:30px;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.search input:focus {
+    border-color: #ff5ca8;
+    box-shadow: 0 0 10px rgba(255, 92, 168, 0.2);
+}
+.hero-right{
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items: center;
+    height: 600px;
+}
+.main-img{
+    width:380px;
+    height:520px;
+    overflow:hidden;
+    border-radius:35px;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    animation:float 6s ease-in-out infinite;
+}
+.main-img img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+.float-card{
+    position:absolute;
+    width:160px;
+    padding:12px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius:20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+.float-card img{
+    width:100%;
+    height:110px;
+    object-fit:cover;
+    border-radius:15px;
+}
+.float-card h3 {
+    font-size: 14px;
+    margin-top: 8px;
+    color: #fff;
+}
+.float-card p{
+    color:#ff73ba;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top:2px;
+}
+.f1{ top:10px; left:-20px; animation: move 5s ease-in-out infinite; }
+.f2{ top:260px; right:-20px; animation: move 4.5s ease-in-out infinite 0.5s; }
+.f3{ bottom:-10px; left:0px; animation: move 5.5s ease-in-out infinite 0.2s; }
+.f4{ bottom:-40px; right:40px; animation: move 4s ease-in-out infinite 0.7s; }
+.title{
+    text-align:center;
+    padding:90px 20px 10px 20px;
+    font-size:40px;
+    background: linear-gradient(90deg, #ff5ca8, #ffffff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: 1px;
+}
+.subtitle-text {
+    text-align: center;
+    color: #666;
+    font-size: 16px;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.products{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap:40px;
+    padding:20px 80px 60px 80px;
+}
+.card{
+    background: rgba(255,255,255,.03);
+    border: 1px solid #1a1a1a;
+    padding:20px;
+    border-radius:25px;
+    transition: .4s ease;
+}
+.card:hover{
+    transform: translateY(-10px);
+    border-color: #ff5ca8;
+    background: rgba(255,255,255,.06);
+}
+.card img{
+    width:100%;
+    height:380px;
+    object-fit:cover;
+    border-radius:20px;
+    margin-bottom: 15px;
+}
+.card h3 {
+    font-size: 20px;
+    font-weight: 600;
+}
+.price{
+    font-size:22px;
+    margin:10px 0;
+    color:#ff73ba;
+    font-weight: 700;
+}
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #ff5ca8;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 50px;
+    box-shadow: 0 10px 20px rgba(255, 92, 168, 0.3);
+    font-weight: 600;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+}
+.toast.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+.contact{
+    padding:100px 20px;
+    text-align:center;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.contact h2 {
+    font-size: 40px;
+    margin-bottom: 30px;
+}
+
+.contact input,
+.contact textarea{
+    width:100%;
+    padding:15px 20px;
+    margin:10px 0;
+    border: 1px solid #222;
+    background: #111;
+    color: white;
+    border-radius:12px;
+    outline: none;
+}
+
+.contact input:focus,
+.contact textarea:focus {
+    border-color: #ff5ca8;
+}
+
+footer{
+    padding:40px;
+    background:#050505;
+    border-top: 1px solid #111;
+    text-align:center;
+    color: #666;
+}
+
+@keyframes float{
+    0%, 100%{ transform:translateY(0); }
+    50%{ transform:translateY(-20px); }
+}
+
+@keyframes move{
+    0%, 100%{ transform:translateY(0); }
+    50%{ transform:translateY(-12px); }
+}
+@media(max-width:900px){
+    .announcement-bar { font-size: 11px; padding: 4px; }
+    nav { top: 21px; flex-direction:column; gap:15px; padding: 15px; }
+    nav ul{ flex-wrap:wrap; justify-content: center; gap: 15px; }
+    .hero{ grid-template-columns:1fr; text-align:center; padding: 240px 20px 40px 20px; }
+    .hero h1{ font-size:45px; }
+    .hero-right { height: 480px; margin-top: 30px;}
+    .main-img{ width:260px; height:360px; }
+    .float-card { width: 130px; padding: 8px; }
+    .float-card img { height: 80px; }
+    .f1 { left: -10px; top: 20px; }
+    .f2 { right: -10px; top: 160px; }
+    .f3 { left: 0px; bottom: 40px; }
+    .f4 { right: -10px; bottom: 20px; }
+    .products { padding: 30px 20px; }
+    .search input { width: 100%; }
+}
+.login-modal{
+    display:none;
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.8);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+}
+
+.login-box{
+    width:400px;
+    max-width:90%;
+    background:#111;
+    padding:30px;
+    border-radius:20px;
+    border:1px solid #333;
+    position:relative;
+    animation:popup .3s ease;
+}
+
+.login-box h2{
+    text-align:center;
+    margin-bottom:20px;
+    color:#ff5ca8;
+}
+
+.login-box input{
+    width:100%;
+    padding:14px;
+    margin:10px 0;
+    border-radius:10px;
+    border:1px solid #333;
+    background:#1a1a1a;
+    color:white;
+    outline:none;
+}
+
+.login-box input:focus{
+    border-color:#ff5ca8;
+}
+
+.close-btn{
+    position:absolute;
+    right:15px;
+    top:10px;
+    cursor:pointer;
+    font-size:20px;
+}
+
+@keyframes popup{
+    from{
+        transform:scale(.8);
+        opacity:0;
+    }
+    to{
+        transform:scale(1);
+        opacity:1;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="announcement-bar">
+    ✨ Free Shipping on orders above ₹1999! Promo Code: KRITIKA05
+</div>
+
+<nav>
+    <div class="logo">Kritika Collection</div>
+    <ul>
+        <li><a href="home">Home</a></li>
+     <li><a href="Clothes.html" target="_blank">Clothes</a></li>
+     <li><a href="Jeans.html" target="_blank">Jeans</a></li>
+     <li><a href="Hoddies.html" target="_blank">Hoddies</a></li>
+     <li><a href="Kurti.html" target="_blank">Kurti</a></li>
+     <li><a href="Contact.html" target="_blank">Contact</a></li>
+
+    </ul>
+    <div class="nav-right">
+        <div class="wishlist" id="wishlist-btn">❤️</div>
+        <div class="cart">🛒 <span id="cart">0</span></div>
+        <button class="login-btn" onclick="openLogin()">Sign In</button>
+    </div>
+</nav>
+
+<section class="hero" id="home">
+    <div>
+        <h1>Wear Your Style with <span>Kritika Collection</span></h1>
+        <p>Girls Fashion • Korean Wear • Jackets • Dresses</p>
+        <button class="btn" onclick="document.getElementById('clothes-section').scrollIntoView();">Shop Now</button>
+        <button class="btn" style="background: transparent; border: 2px solid white;" onclick="document.getElementById('jeans-section').scrollIntoView();">Explore</button>
+        <div class="search">
+            <input type="text" id="search-input" placeholder="Search product globally (e.g. Jeans, Hoodie)...">
+        </div>
+    </div>
+
+    <div class="hero-right">
+        <div class="main-img">
+            <img src="https://media.istockphoto.com/id/656530364/photo/be-a-flamingo-in-a-flock-of-pigeons.jpg?s=612x612&w=0&k=20&c=mfh7GioZdjPJz5X1pWLpAbA0HjDxt0eg0gRcwDasCoo=" alt="Main Model">
+        </div>
+
+        <div class="float-card f1">
+            <img src="https://images.unsplash.com/photo-1591047139829-d91aecb6caea?q=80&w=300" alt="Jacket">
+            <h3>Korean Jacket</h3>
+            <p>₹2,499</p>
+        </div>
+        <div class="float-card f2">
+            <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?q=80&w=300" alt="Dress">
+            <h3>Trending Dress</h3>
+            <p>₹3,299</p>
+        </div>
+        <div class="float-card f3">
+            <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=300" alt="Jeans">
+            <h3>Wide Jeans</h3>
+            <p>₹1,999</p>
+        </div>
+        <div class="float-card f4">
+            <img src="https://images.unsplash.com/photo-1618244972963-dbee1a7edc95?q=80&w=300" alt="New Arrival">
+            <h3>New Arrival</h3>
+            <p>₹2,799</p>
+        </div>
+    </div>
+</section>
+<h2 class="title" id="clothes-section">Premium Clothes</h2>
+<p class="subtitle-text">Dresses & Luxury Wear</p>
+<section class="products">
+    <div class="card" data-title="premium overcoat coat clothes luxury jacket">
+        <img src="https://www.montecarlo.in/cdn/shop/files/225072370-1-36_1.jpg?v=1763971000" alt="Product">
+        <h3>Premium Overcoat</h3>
+        <p class="price">₹4,499</p>
+        <button class="btn add-to-cart-btn" style="width: 100%; margin: 0;">Add to Cart</button>
+    </div>
+    <div class="card" data-title="korean knitwear top winter clothes top">
+        <img src="https://madameonline.com/cdn/shop/files/8_9463019a-fa7e-45d4-b9ae-9648ed1601fb.jpg?v=1767252179&width=480" alt="Product">
+        <h3>Knitwear</h3>
+        <p class="price">₹1,899</p>
+        <button class="btn add-to-cart-btn" style="width: 100%; margin: 0;">Add to Cart</button>
+    </div>
+    <div class="card" data-title="summer breeze dress luxury clothes outfit">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQOZSjpN-jfOt7sQs5MFSyMdzeZ0f3v763s0mJvIb2ew&s" alt="Product">
+        <h3>Summer Breeze Dress</h3>
+        <p class="price">₹2,999</p>
+        <button class="btn add-to-cart-btn" style="width: 100%; margin: 0;">Add to Cart</button>
+    </div>
+</section>
+<h2 class="title" id="jeans-section">Denim & Jeans</h2>
+<p class="subtitle-text">Trending Bottoms & Fits</p>
+<section class="products">
+    <div class="card" data-title="wide leg denim jeans trousers bottoms">
+        <img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?q=80&w=400" alt="Product">
+        <h3>Wide Leg Denim Jeans</h3>
+        <p class="price">₹1,999</p>
+        <button class="btn add-to-cart-btn" style="width: 100%; margin: 0;">Add to Cart</button>
+    </div>
+    <div class="card" data-title="high waist vintage jeans denim bottoms grey">
+        <img src="https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQt_5t0NwUu14fnZ1O0wx4r-eK9s897D5o2S4yfFAGkUTo1bUIjgTbsdZPeyn8DXNtqkk0ZvOylCKo-bhIFTG8BTBNtIXWp" alt="Product">
+        <h3>Vintage Jeans</h3>
+        <p class="price">₹2,199</p>
+        <button class="btn add-to-cart-btn" style="width: 100%; margin: 0;">Add to Cart</button>
+    </div>
+    <div class="card" data-title="cargo denim jeans loose street style blue">
+        <img src="https://images.unsplash.com/photo-1565084888279-aca607ecce0c?q=80&w=400" alt="Product">
+        <h3>High-Waist Cargo Jeans</h3>
+        <p class="price">₹2,499</p>
+        <button class="btn add-to-cart-btn" style="width: 100%; margin: 0;">Add to Cart</button>
+    </div>
+</section>
+<h2 class="title" id="hoodie-section">Comfy Hoodies</h2>
+<p class="subtitle-text">Oversized & Korean Aesthetics</p>
+<section class="products">
+    <div class="card" data-title="oversized beige hoodie soft pastel warm winter">
+        <img src="https://images.unsplash.com/photo-1556905055-8f358a7a47b2?q=80&w=400" alt="Product">
+        <h3>Oversized Beige Hoodie</h3>
+        <p class="price">₹1,799</p>
+        <button class="btn add-to-cart-btn" style="width: 100%; margin: 0;">Add to Cart</button>
+    </div>
+    <div class="card" data-title="korean aesthetic lavender hoodie purple winter">
+        <img src="data:image/jpeg;base64,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" alt="Product">
+        <h3>Aesthetic Hoodie</h3>
+        <p class="price">₹1,999</p>
+        <button class="btn add-to-cart-btn" style="width: 100%; margin: 0;">Add to Cart</button>
+    </div>
+    <div class="card" data-title="vintage black zip up hoodie street style jacket">
+        <img src="data:image/jpeg;base64,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" alt="Product">
+        <h3>Vintage Zip-Up Hoodie</h3>
+        <p class="price">₹2,299</p>
+        <button class="btn add-to-cart-btn" style="width: 100%; margin: 0;">Add to Cart</button>
+    </div>
+</section>
+<section class="contact" id="contact">
+    <h2>Get In Touch</h2>
+    <form id="contact-form" onsubmit="event.preventDefault(); showToast('✨ Message Sent Successfully!'); this.reset();">
+        <input type="text" placeholder="Your Name" required>
+        <input type="email" placeholder="Your Email" required>
+        <textarea rows="5" placeholder="Your Message" required></textarea>
+        <button type="submit" class="btn" style="margin-top: 10px; padding: 14px 50px;">Send</button>
+    </form>
+</section>
+<div class="toast" id="toast-notification">🛒 Item added to cart!</div>
+<footer>
+    <p>&copy; 2026 Kritika Collection. All Rights Reserved.</p>
+</footer>
+<script>
+    function openLogin(){
+    document.getElementById("loginModal").style.display="flex";
+}
+
+function closeLogin(){
+    document.getElementById("loginModal").style.display="none";
+}
+
+document.getElementById("loginForm").addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    const name=document.getElementById("userName").value;
+    const email=document.getElementById("userEmail").value;
+    const phone=document.getElementById("userPhone").value;
+
+    localStorage.setItem("userName",name);
+    localStorage.setItem("userEmail",email);
+    localStorage.setItem("userPhone",phone);
+
+    document.querySelector(".login-btn").innerHTML="👤 "+name;
+
+    showToast("✅ Welcome "+name+"!");
+
+    closeLogin();
+
+    this.reset();
+});
+
+window.addEventListener("load",()=>{
+
+    const savedName=localStorage.getItem("userName");
+
+    if(savedName){
+        document.querySelector(".login-btn").innerHTML=
+        "👤 "+savedName;
+    }
+});
+
+window.onclick=function(event){
+
+    const modal=document.getElementById("loginModal");
+
+    if(event.target===modal){
+        closeLogin();
+    }
+}
+function showToast(message) {
+    const toast = document.getElementById('toast-notification');
+    toast.textContent = message;
+    toast.classList.add('show');
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+let cartCount = 0;
+const cartElement = document.getElementById('cart');
+const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+
+addToCartButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        cartCount++;
+        cartElement.textContent = cartCount;
+        
+        const productCard = e.target.closest('.card');
+        const productName = productCard.querySelector('h3').textContent;
+        showToast(`🛍️ Added ${productName} to your cart!`);
+    });
+});
+const searchInput = document.getElementById('search-input');
+const productCards = document.querySelectorAll('.card');
+
+searchInput.addEventListener('input', (e) => {
+    const searchTerm = e.target.value.toLowerCase().trim();
+    
+    productCards.forEach(card => {
+        const keywords = card.getAttribute('data-title').toLowerCase();
+        if (keywords.includes(searchTerm)) {
+            card.style.display = 'block';
+        } else {
+            card.style.display = 'none';
+        }
+    });
+});
+const wishlistBtn = document.getElementById('wishlist-btn');
+wishlistBtn.addEventListener('click', () => {
+    showToast('❤️ Added to your favorite wishlist collection!');
+});
+</script>
+<div class="login-modal" id="loginModal">
+    <div class="login-box">
+        <span class="close-btn" onclick="closeLogin()">✖</spans>
+
+        <h2>Sign In</h2>
+
+        <form id="loginForm">
+            <input type="text" id="userName" placeholder="Full Name" required>
+            <input type="email" id="userEmail" placeholder="Email Address" required>
+            <input type="tel" id="userPhone" placeholder="Contact Number" required>
+
+            <button type="submit" class="btn" style="width:100%;">
+                Sign In
+            </button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jeans Collection</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500&family=Archivo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-void:#15111a;       
+  --bg-panel:#1d1822;
+  --bg-panel-2:#241d2c;
+  --gold:#c9a25f;           
+  --gold-bright:#e7c581;
+  --wine:#8c3b4f;           
+  --wine-bright:#b8556c;
+  --denim:#3f5577;          
+  --cream:#f3ead9;
+  --ink-soft:#cfc4d6;
+  --ink-faint:#8d8294;
+  --line:rgba(243,234,217,0.09);
+  --success:#5d9e7c;
+  --danger:#c1554f;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg-void);
+  color:var(--cream);
+  font-family:'Archivo',sans-serif;
+  overflow-x:hidden;
+  cursor:none;
+}
+@media (max-width:900px), (hover:none){ body{cursor:auto;} }
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important;}
+  body{cursor:auto !important;}
+  .thread-cursor,.thread-cursor-ring{display:none !important;}
+}
+a{color:inherit; text-decoration:none;}
+img{display:block; max-width:100%;}
+button{font-family:inherit; cursor:pointer; border:none; background:none; color:inherit;}
+h1,h2,h3{font-family:'Fraunces',serif; font-weight:700; line-height:1.04; letter-spacing:-0.01em;}
+::selection{background:var(--gold); color:var(--bg-void);}
+
+/* focus visibility */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible{
+  outline:2px solid var(--gold-bright);
+  outline-offset:3px;
+}
+
+/* ============================================================
+   LOADING SCREEN
+============================================================ */
+#loader{
+  position:fixed; inset:0; z-index:300;
+  background:var(--bg-void);
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  gap:22px;
+  transition:opacity 0.7s ease, visibility 0.7s ease;
+}
+#loader.hide{opacity:0; visibility:hidden; pointer-events:none;}
+.loader-mark{
+  font-family:'Fraunces',serif; font-weight:800; font-size:1.6rem;
+  letter-spacing:0.04em; color:var(--cream);
+  display:flex; align-items:baseline; gap:8px;
+}
+.loader-mark .dot{color:var(--gold); font-size:2rem; line-height:0;}
+.loader-bar-track{
+  width:220px; height:2px; background:rgba(243,234,217,0.12); position:relative; overflow:hidden; border-radius:2px;
+}
+.loader-bar-fill{
+  position:absolute; top:0; left:0; height:100%; width:40%;
+  background:linear-gradient(90deg, var(--wine), var(--gold));
+  animation:loader-sweep 1.1s ease-in-out infinite;
+}
+@keyframes loader-sweep{
+  0%{left:-40%;}
+  100%{left:100%;}
+}
+.loader-caption{font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--ink-faint);}
+
+/* ============================================================
+   CUSTOM CURSOR
+============================================================ */
+.thread-cursor{
+  position:fixed; top:0; left:0; width:7px; height:7px; border-radius:50%;
+  background:var(--gold-bright); pointer-events:none; z-index:999;
+  transform:translate(-50%,-50%);
+}
+.thread-cursor-ring{
+  position:fixed; top:0; left:0; width:32px; height:32px; border-radius:50%;
+  border:1.3px solid var(--gold); pointer-events:none; z-index:998;
+  transform:translate(-50%,-50%); opacity:0.6;
+  transition:width 0.25s ease, height 0.25s ease, border-color 0.25s ease, opacity 0.25s ease;
+}
+.thread-cursor-ring.grow{width:58px; height:58px; border-color:var(--wine-bright); opacity:0.9;}
+@media (max-width:900px), (hover:none){ .thread-cursor,.thread-cursor-ring{display:none;} }
+
+/* ============================================================
+   PARTICLES CANVAS (ambient gold thread-flecks)
+============================================================ */
+#particles{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  opacity:0.55;
+}
+
+/* ============================================================
+   SHARED KEYFRAMES
+============================================================ */
+@keyframes fade-up{ from{opacity:0; transform:translateY(26px);} to{opacity:1; transform:translateY(0);} }
+@keyframes fade-in{ from{opacity:0;} to{opacity:1;} }
+@keyframes pop-in{ 0%{opacity:0; transform:scale(0.85);} 70%{opacity:1; transform:scale(1.04);} 100%{opacity:1; transform:scale(1);} }
+@keyframes toast-in{ from{opacity:0; transform:translateX(40px) scale(0.95);} to{opacity:1; transform:translateX(0) scale(1);} }
+@keyframes toast-out{ from{opacity:1; transform:translateX(0) scale(1);} to{opacity:0; transform:translateX(40px) scale(0.95);} }
+@keyframes bounce-badge{ 0%{transform:scale(1);} 40%{transform:scale(1.35);} 100%{transform:scale(1);} }
+@keyframes heart-pop{ 0%{transform:scale(1);} 35%{transform:scale(1.5) rotate(-8deg);} 60%{transform:scale(0.92);} 100%{transform:scale(1);} }
+@keyframes shimmer-text{ 0%{background-position:-200% 0;} 100%{background-position:200% 0;} }
+@keyframes spin-slow{ from{transform:rotate(0deg);} to{transform:rotate(360deg);} }
+@keyframes modal-in{ from{opacity:0; transform:translateY(20px) scale(0.98);} to{opacity:1; transform:translateY(0) scale(1);} }
+@keyframes overlay-in{ from{opacity:0;} to{opacity:1;} }
+@keyframes spin{ to{transform:rotate(360deg);} }
+
+.reveal{ opacity:0; transform:translateY(34px); transition:opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1); }
+.reveal.in{ opacity:1; transform:translateY(0); }
+.reveal.stagger.in{ transition-delay:var(--d,0s); }
+
+/* ============================================================
+   NAV
+============================================================ */
+nav{
+  position:fixed; top:0; left:0; right:0; z-index:60;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 5vw;
+  background:rgba(21,17,26,0.7);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line);
+  transition:padding 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
+  opacity:0; animation:fade-up 0.7s ease 0.1s forwards;
+}
+nav.scrolled{ padding:12px 5vw; background:rgba(21,17,26,0.92); box-shadow:0 14px 30px -20px rgba(0,0,0,0.6); }
+.nav-left{ display:flex; align-items:center; gap:36px; }
+.brand-mark{
+  font-family:'Fraunces',serif; font-weight:800; font-size:1.3rem; color:var(--cream);
+  display:flex; align-items:baseline; gap:6px; flex-shrink:0;
+}
+.brand-mark .dot{ color:var(--gold); font-size:1.55rem; line-height:0; }
+@media (max-width:420px){
+  .brand-mark{ font-size:1.02rem; }
+  .brand-mark .dot{ font-size:1.2rem; }
+  nav{ padding:16px 4vw; }
+  .nav-right{ gap:10px; }
+}
+.nav-links{ display:flex; gap:26px; font-size:0.82rem; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-soft); }
+.nav-links a{ position:relative; padding-bottom:4px; transition:color 0.25s ease; }
+.nav-links a:hover{ color:var(--gold-bright); }
+.nav-links a::after{ content:''; position:absolute; left:0; bottom:0; width:0%; height:1.5px; background:var(--gold); transition:width 0.3s cubic-bezier(0.65,0,0.35,1); }
+.nav-links a:hover::after{ width:100%; }
+@media (max-width:880px){ .nav-links{ display:none; } }
+
+.nav-right{ display:flex; align-items:center; gap:18px; }
+.icon-btn{
+  position:relative; width:40px; height:40px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid var(--line); color:var(--ink-soft);
+  transition:border-color 0.25s ease, color 0.25s ease, transform 0.25s ease;
+}
+.icon-btn:hover{ border-color:var(--gold); color:var(--gold-bright); transform:translateY(-2px); }
+.icon-btn svg{ width:18px; height:18px; }
+.count-badge{
+  position:absolute; top:-6px; right:-6px;
+  min-width:18px; height:18px; padding:0 4px;
+  border-radius:9px; background:var(--wine); color:var(--cream);
+  font-size:0.65rem; font-weight:700; display:flex; align-items:center; justify-content:center;
+  transform:scale(0); transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+.count-badge.show{ transform:scale(1); }
+.count-badge.bump{ animation:bounce-badge 0.4s ease; }
+
+/* search bar */
+.search-wrap{ position:relative; }
+.search-toggle{ }
+.search-panel{
+  position:absolute; top:54px; right:0;
+  width:300px; max-width:calc(100vw - 32px); background:var(--bg-panel); border:1px solid var(--line); border-radius:10px;
+  box-shadow:0 20px 50px -20px rgba(0,0,0,0.7);
+  padding:6px;
+  opacity:0; visibility:hidden; transform:translateY(-8px);
+  transition:opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease;
+}
+.search-panel.open{ opacity:1; visibility:visible; transform:translateY(0); }
+.search-panel input{
+  width:100%; background:var(--bg-panel-2); border:1px solid var(--line); border-radius:7px;
+  padding:11px 14px; color:var(--cream); font-size:0.9rem;
+}
+.search-panel input::placeholder{ color:var(--ink-faint); }
+.search-panel input:focus{ outline:none; border-color:var(--gold); }
+.search-results{ max-height:280px; overflow-y:auto; margin-top:6px; }
+.search-result-item{
+  display:flex; align-items:center; gap:10px; padding:9px 8px; border-radius:6px;
+  transition:background 0.2s ease; cursor:pointer;
+}
+.search-result-item:hover{ background:var(--bg-panel-2); }
+.search-result-item .swatch{ width:34px; height:34px; border-radius:5px; flex-shrink:0; background-size:cover; background-position:center; }
+.search-result-item .meta .name{ font-size:0.82rem; font-weight:600; color:var(--cream); }
+.search-result-item .meta .price{ font-size:0.74rem; color:var(--gold); }
+.search-empty{ padding:18px 10px; text-align:center; font-size:0.8rem; color:var(--ink-faint); }
+
+/* ============================================================
+   HERO SLIDER
+============================================================ */
+.hero-slider{
+  position:relative; height:100vh; min-height:560px; overflow:hidden;
+}
+.slide{
+  position:absolute; inset:0;
+  display:flex; align-items:center;
+  opacity:0; visibility:hidden;
+  transition:opacity 1.1s ease;
+  padding:0 6vw;
+}
+.slide.active{ opacity:1; visibility:visible; z-index:2; }
+.slide-bg{
+  position:absolute; inset:0; z-index:0;
+}
+.slide-bg::after{
+  content:'';
+  position:absolute; inset:0;
+  background:linear-gradient(100deg, rgba(21,17,26,0.92) 10%, rgba(21,17,26,0.55) 50%, rgba(21,17,26,0.25) 100%);
+}
+.slide1 .slide-bg{ background:radial-gradient(ellipse 70% 60% at 75% 30%, rgba(140,59,79,0.35), transparent 60%), linear-gradient(160deg,#241d2c,#15111a 70%); }
+.slide2 .slide-bg{ background:radial-gradient(ellipse 70% 60% at 75% 40%, rgba(63,85,119,0.4), transparent 60%), linear-gradient(160deg,#1d2535,#15111a 70%); }
+.slide3 .slide-bg{ background:radial-gradient(ellipse 70% 60% at 75% 35%, rgba(201,162,95,0.3), transparent 60%), linear-gradient(160deg,#2c2418,#15111a 70%); }
+
+.slide-content{ position:relative; z-index:2; max-width:620px; }
+.slide-eyebrow{
+  display:inline-flex; align-items:center; gap:10px;
+  font-size:0.78rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase;
+  color:var(--gold-bright); margin-bottom:20px;
+}
+.slide-eyebrow::before{ content:''; width:26px; height:1px; background:var(--gold-bright); }
+.slide-content h1{
+  font-size:clamp(2.6rem,6vw,4.4rem); color:var(--cream); margin-bottom:18px;
+}
+.slide-content h1 em{ font-style:italic; color:var(--wine-bright); font-weight:600; }
+.slide-content p{ font-size:1.05rem; line-height:1.65; color:var(--ink-soft); max-width:460px; margin-bottom:32px; }
+
+.slide-cta{
+  display:inline-flex; align-items:center; gap:10px;
+  background:linear-gradient(120deg, var(--gold), var(--gold-bright));
+  color:var(--bg-void); padding:15px 30px; border-radius:3px;
+  font-weight:700; font-size:0.92rem; letter-spacing:0.02em;
+  transition:transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+  box-shadow:0 14px 30px -12px rgba(201,162,95,0.5);
+}
+.slide-cta:hover{ transform:translateY(-3px) scale(1.02); box-shadow:0 18px 36px -10px rgba(201,162,95,0.6); }
+
+/* slider per-slide load animation */
+.slide.active .slide-eyebrow{ animation:fade-up 0.7s ease 0.2s both; }
+.slide.active h1{ animation:fade-up 0.8s ease 0.35s both; }
+.slide.active p{ animation:fade-up 0.8s ease 0.5s both; }
+.slide.active .slide-cta{ animation:fade-up 0.8s ease 0.65s both; }
+
+.slider-nav{
+  position:absolute; bottom:36px; left:50%; transform:translateX(-50%); z-index:5;
+  display:flex; gap:10px;
+}
+.slider-dot{
+  width:34px; height:3px; background:rgba(243,234,217,0.25); border-radius:2px;
+  overflow:hidden; position:relative; transition:background 0.3s ease;
+}
+.slider-dot::after{
+  content:''; position:absolute; inset:0; background:var(--gold); width:0%;
+}
+.slider-dot.active::after{ animation:dot-fill 6s linear forwards; }
+@keyframes dot-fill{ from{width:0%;} to{width:100%;} }
+
+.slider-arrow{
+  position:absolute; top:50%; transform:translateY(-50%); z-index:5;
+  width:46px; height:46px; border-radius:50%;
+  background:rgba(21,17,26,0.5); border:1px solid var(--line); color:var(--cream);
+  display:flex; align-items:center; justify-content:center;
+  transition:background 0.25s ease, border-color 0.25s ease, transform 0.25s ease;
+}
+.slider-arrow:hover{ background:rgba(201,162,95,0.2); border-color:var(--gold); }
+.slider-arrow.prev{ left:24px; }
+.slider-arrow.next{ right:24px; }
+.slider-arrow svg{ width:18px; height:18px; }
+@media (max-width:700px){ .slider-arrow{ display:none; } }
+
+.scroll-cue{
+  position:absolute; bottom:36px; right:6vw; z-index:5;
+  display:flex; flex-direction:column; align-items:center; gap:8px;
+  color:var(--ink-faint); font-size:0.68rem; letter-spacing:0.18em; text-transform:uppercase;
+}
+.scroll-cue .line{ width:1px; height:36px; background:linear-gradient(180deg, var(--gold), transparent); animation:scroll-cue-pulse 1.8s ease-in-out infinite; }
+@keyframes scroll-cue-pulse{ 0%,100%{opacity:0.3;} 50%{opacity:1;} }
+@media (max-width:700px){ .scroll-cue{ display:none; } }
+
+/* ============================================================
+   SECTION SHELL
+============================================================ */
+section{ position:relative; z-index:1; padding:100px 6vw; }
+.section-head{ text-align:center; max-width:640px; margin:0 auto 56px; }
+.eyebrow{
+  display:inline-flex; align-items:center; gap:10px; justify-content:center;
+  font-size:0.78rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--gold-bright); margin-bottom:18px;
+}
+.section-head h2{ font-size:clamp(2rem,4vw,2.7rem); color:var(--cream); }
+.section-head p{ margin-top:14px; color:var(--ink-faint); font-size:1.02rem; line-height:1.6; }
+
+/* ============================================================
+   FILTER BAR
+============================================================ */
+.filter-bar{
+  display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:50px;
+}
+.filter-chip{
+  padding:10px 20px; border-radius:30px; border:1px solid var(--line);
+  font-size:0.82rem; font-weight:600; letter-spacing:0.02em; color:var(--ink-soft);
+  background:var(--bg-panel); transition:all 0.3s cubic-bezier(0.22,1,0.36,1);
+}
+.filter-chip:hover{ border-color:var(--gold); color:var(--gold-bright); transform:translateY(-2px); }
+.filter-chip.active{
+  background:linear-gradient(120deg, var(--wine), var(--wine-bright));
+  border-color:transparent; color:var(--cream);
+  box-shadow:0 10px 24px -10px rgba(140,59,79,0.6);
+}
+
+/* ============================================================
+   PRODUCT GRID + 3D CARDS
+============================================================ */
+.product-grid{
+  display:grid; grid-template-columns:repeat(4,1fr); gap:26px;
+  max-width:1280px; margin:0 auto;
+}
+@media (max-width:1080px){ .product-grid{ grid-template-columns:repeat(3,1fr); } }
+@media (max-width:760px){ .product-grid{ grid-template-columns:repeat(2,1fr); gap:16px; } }
+@media (max-width:480px){ .product-grid{ grid-template-columns:1fr; } }
+
+.empty-state{
+  max-width:1280px; margin:0 auto; text-align:center;
+  padding:60px 20px; color:var(--ink-faint); border:1px dashed var(--line); border-radius:14px;
+}
+.empty-state h3{ color:var(--cream); font-size:1.3rem; margin-bottom:10px; }
+
+.product-card{
+  position:relative;
+  background:var(--bg-panel);
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+  transition:transform 0.15s ease, box-shadow 0.4s ease, border-color 0.4s ease;
+  transform-style:preserve-3d;
+}
+.product-card:hover{
+  border-color:rgba(201,162,95,0.35);
+  box-shadow:0 30px 60px -24px rgba(0,0,0,0.7);
+}
+.product-card.hidden-by-filter{ display:none; }
+
+.card-media{
+  position:relative; height:300px; overflow:hidden;
+  display:flex; align-items:flex-end; padding:16px;
+  background-size:cover; background-position:center;
+}
+.card-media::after{
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(180deg, transparent 45%, rgba(0,0,0,0.55));
+}
+.card-badges{ position:absolute; top:14px; left:14px; z-index:3; display:flex; flex-direction:column; gap:6px; }
+.badge{
+  font-size:0.62rem; font-weight:800; letter-spacing:0.08em; text-transform:uppercase;
+  padding:5px 10px; border-radius:4px; color:var(--bg-void);
+}
+.badge.new{ background:var(--gold-bright); }
+.badge.sale{ background:var(--wine-bright); color:var(--cream); }
+.badge.trending{ background:var(--denim); color:var(--cream); }
+
+.wishlist-btn{
+  position:absolute; top:14px; right:14px; z-index:3;
+  width:36px; height:36px; border-radius:50%;
+  background:rgba(21,17,26,0.55); backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center;
+  color:var(--cream); transition:background 0.25s ease, transform 0.25s ease;
+}
+.wishlist-btn:hover{ background:rgba(140,59,79,0.4); transform:scale(1.08); }
+.wishlist-btn svg{ width:17px; height:17px; transition:fill 0.2s ease, stroke 0.2s ease; }
+.wishlist-btn.active svg{ fill:var(--wine-bright); stroke:var(--wine-bright); }
+.wishlist-btn.pop svg{ animation:heart-pop 0.5s ease; }
+
+.card-tag-name{
+  position:relative; z-index:2; color:var(--cream); font-family:'Fraunces',serif; font-weight:700; font-size:1.05rem;
+}
+
+.card-body{ padding:18px 18px 20px; }
+.card-cat{ font-size:0.68rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--gold-bright); margin-bottom:6px; }
+.card-desc{ font-size:0.84rem; color:var(--ink-faint); margin-bottom:14px; line-height:1.45; min-height:38px; }
+.card-price-row{ display:flex; align-items:center; justify-content:space-between; }
+.card-price{ font-weight:700; color:var(--cream); font-size:1.05rem; }
+.card-price .strike{ color:var(--ink-faint); text-decoration:line-through; font-weight:500; font-size:0.85rem; margin-right:6px; }
+.add-cart-btn{
+  display:flex; align-items:center; gap:7px;
+  background:var(--bg-panel-2); border:1px solid var(--line); color:var(--cream);
+  padding:9px 14px; border-radius:6px; font-size:0.76rem; font-weight:700; letter-spacing:0.02em;
+  transition:background 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+}
+.add-cart-btn:hover{ border-color:var(--gold); transform:translateY(-2px); }
+.add-cart-btn.added{ background:var(--success); border-color:var(--success); }
+.add-cart-btn svg{ width:14px; height:14px; }
+
+/* swatch backgrounds for cards (denim washes, fallback when no photo set) */
+.sw-a{ background:linear-gradient(155deg,#4a6189,#2b3a55 80%); }
+.sw-b{ background:linear-gradient(155deg,#34465f,#1c2640 80%); }
+.sw-c{ background:linear-gradient(155deg,#7f93b3,#3f5577 80%); }
+.sw-d{ background:linear-gradient(155deg,#23314a,#161e30 80%); }
+.sw-e{ background:linear-gradient(155deg,#5c5048,#2a231d 80%); }
+.sw-f{ background:linear-gradient(155deg,#3a2e35,#1c1620 80%); }
+
+/* ============================================================
+   TOAST
+============================================================ */
+#toast-stack{
+  position:fixed; bottom:26px; right:26px; z-index:400;
+  display:flex; flex-direction:column; gap:10px; align-items:flex-end;
+}
+.toast{
+  display:flex; align-items:center; gap:12px;
+  background:var(--bg-panel); border:1px solid var(--line); border-radius:10px;
+  padding:14px 18px; min-width:240px; max-width:320px;
+  box-shadow:0 20px 44px -18px rgba(0,0,0,0.7);
+  animation:toast-in 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+.toast.leaving{ animation:toast-out 0.35s ease forwards; }
+.toast .icon{
+  width:30px; height:30px; border-radius:50%; flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(201,162,95,0.15); color:var(--gold-bright);
+}
+.toast.wishlist .icon{ background:rgba(140,59,79,0.2); color:var(--wine-bright); }
+.toast.error .icon{ background:rgba(193,85,79,0.2); color:var(--danger); }
+.toast .icon svg{ width:15px; height:15px; }
+.toast .text{ font-size:0.84rem; color:var(--cream); line-height:1.3; }
+.toast .text strong{ color:var(--gold-bright); }
+
+/* ============================================================
+   FOOTER
+============================================================ */
+footer{
+  background:var(--bg-panel); border-top:1px solid var(--line);
+  padding:50px 6vw 30px; text-align:center; font-size:0.85rem; color:var(--ink-faint);
+  position:relative; z-index:1;
+}
+footer .brand-mark{ color:var(--cream); justify-content:center; margin-bottom:10px; }
+footer .foot-links{ display:flex; justify-content:center; gap:22px; margin:18px 0; flex-wrap:wrap; align-items:center; }
+footer .foot-links a:hover{ color:var(--gold-bright); }
+footer .copyright{ margin-top:22px; opacity:0.6; font-size:0.78rem; }
+
+.admin-entry-btn{
+  font-size:0.74rem; letter-spacing:0.08em; text-transform:uppercase; font-weight:700;
+  color:var(--ink-faint); border:1px solid var(--line); padding:7px 14px; border-radius:30px;
+  transition:color 0.25s ease, border-color 0.25s ease;
+  display:inline-flex; align-items:center; gap:6px;
+}
+.admin-entry-btn:hover{ color:var(--gold-bright); border-color:var(--gold); }
+.admin-entry-btn svg{ width:13px; height:13px; }
+
+/* ============================================================
+   ADMIN PANEL — modal overlay
+============================================================ */
+.admin-overlay{
+  position:fixed; inset:0; z-index:500;
+  background:rgba(10,8,13,0.78);
+  backdrop-filter:blur(4px);
+  display:flex; align-items:center; justify-content:center;
+  padding:24px;
+  opacity:0; visibility:hidden; transition:opacity 0.3s ease, visibility 0.3s ease;
+}
+.admin-overlay.open{ opacity:1; visibility:visible; }
+.admin-overlay.open .admin-modal{ animation:modal-in 0.35s cubic-bezier(0.22,1,0.36,1) both; }
+
+.admin-modal{
+  background:var(--bg-panel); border:1px solid var(--line); border-radius:16px;
+  width:100%; max-width:980px; max-height:88vh; overflow:hidden;
+  display:flex; flex-direction:column;
+  box-shadow:0 50px 100px -30px rgba(0,0,0,0.8);
+}
+.admin-modal.small{ max-width:420px; }
+
+.admin-header{
+  display:flex; align-items:center; justify-content:space-between; gap:14px;
+  padding:22px 26px; border-bottom:1px solid var(--line); flex-shrink:0;
+}
+.admin-header h3{ font-size:1.25rem; color:var(--cream); display:flex; align-items:center; gap:10px; }
+.admin-header .sub{ font-size:0.78rem; color:var(--ink-faint); margin-top:3px; font-family:'Archivo',sans-serif; font-weight:500; }
+.admin-close{
+  width:34px; height:34px; border-radius:50%; border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center; color:var(--ink-soft);
+  transition:border-color 0.2s ease, color 0.2s ease, transform 0.2s ease; flex-shrink:0;
+}
+.admin-close:hover{ border-color:var(--wine-bright); color:var(--wine-bright); transform:rotate(90deg); }
+.admin-close svg{ width:16px; height:16px; }
+
+.admin-body{ padding:22px 26px; overflow-y:auto; flex:1; }
+
+/* login form */
+.admin-login-icon{
+  width:54px; height:54px; border-radius:50%; background:rgba(201,162,95,0.12);
+  display:flex; align-items:center; justify-content:center; color:var(--gold-bright);
+  margin:0 auto 18px;
+}
+.admin-login-icon svg{ width:24px; height:24px; }
+.field-group{ margin-bottom:16px; }
+.field-group label{ display:block; font-size:0.76rem; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-faint); margin-bottom:8px; }
+.field-group input, .field-group select, .field-group textarea{
+  width:100%; background:var(--bg-panel-2); border:1px solid var(--line); border-radius:8px;
+  padding:12px 14px; color:var(--cream); font-size:0.92rem; font-family:inherit;
+  transition:border-color 0.2s ease;
+}
+.field-group input:focus, .field-group select:focus, .field-group textarea:focus{ outline:none; border-color:var(--gold); }
+.field-group textarea{ resize:vertical; min-height:70px; }
+.field-row{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+@media (max-width:520px){ .field-row{ grid-template-columns:1fr; } }
+.field-hint{ font-size:0.72rem; color:var(--ink-faint); margin-top:6px; line-height:1.4; }
+.field-error{ font-size:0.78rem; color:var(--danger); margin-top:6px; display:none; }
+.field-error.show{ display:block; }
+
+.checkbox-row{ display:flex; align-items:center; gap:10px; }
+.checkbox-row input[type="checkbox"]{ width:18px; height:18px; accent-color:var(--gold); flex-shrink:0; }
+.checkbox-row label{ margin:0; text-transform:none; font-size:0.86rem; color:var(--ink-soft); font-weight:600; }
+
+.btn-primary{
+  width:100%; background:linear-gradient(120deg, var(--gold), var(--gold-bright)); color:var(--bg-void);
+  padding:13px; border-radius:8px; font-weight:700; font-size:0.9rem; letter-spacing:0.02em;
+  transition:transform 0.2s ease, box-shadow 0.2s ease;
+}
+.btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 28px -12px rgba(201,162,95,0.55); }
+.btn-primary:disabled{ opacity:0.6; cursor:not-allowed; transform:none; }
+.btn-secondary{
+  background:var(--bg-panel-2); border:1px solid var(--line); color:var(--cream);
+  padding:13px 20px; border-radius:8px; font-weight:700; font-size:0.85rem;
+  transition:border-color 0.2s ease, transform 0.2s ease;
+}
+.btn-secondary:hover{ border-color:var(--gold); transform:translateY(-2px); }
+.btn-danger{
+  background:rgba(193,85,79,0.12); border:1px solid rgba(193,85,79,0.4); color:#e08a85;
+  padding:9px 16px; border-radius:7px; font-weight:700; font-size:0.78rem;
+  transition:background 0.2s ease, transform 0.2s ease;
+}
+.btn-danger:hover{ background:rgba(193,85,79,0.22); transform:translateY(-1px); }
+
+/* admin toolbar inside dashboard */
+.admin-toolbar{ display:flex; gap:12px; flex-wrap:wrap; justify-content:space-between; align-items:center; margin-bottom:20px; }
+.admin-toolbar .stat-pill{
+  font-size:0.78rem; color:var(--ink-soft); background:var(--bg-panel-2); border:1px solid var(--line);
+  padding:8px 14px; border-radius:30px; font-weight:600;
+}
+.admin-add-btn{
+  display:inline-flex; align-items:center; gap:8px;
+  background:linear-gradient(120deg, var(--wine), var(--wine-bright)); color:var(--cream);
+  padding:11px 18px; border-radius:8px; font-weight:700; font-size:0.84rem;
+  transition:transform 0.2s ease, box-shadow 0.2s ease;
+}
+.admin-add-btn:hover{ transform:translateY(-2px); box-shadow:0 14px 28px -12px rgba(140,59,79,0.6); }
+.admin-add-btn svg{ width:15px; height:15px; }
+
+/* admin product list */
+.admin-table{ display:flex; flex-direction:column; gap:10px; }
+.admin-row{
+  display:flex; align-items:center; gap:14px; background:var(--bg-panel-2); border:1px solid var(--line);
+  border-radius:10px; padding:12px 14px;
+}
+.admin-row .thumb{
+  width:52px; height:52px; border-radius:7px; flex-shrink:0; background-size:cover; background-position:center;
+}
+.admin-row .info{ flex:1; min-width:0; }
+.admin-row .info .name{ font-weight:700; color:var(--cream); font-size:0.92rem; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.admin-row .info .meta-line{ font-size:0.76rem; color:var(--ink-faint); margin-top:3px; }
+.admin-row .mini-badge{
+  font-size:0.6rem; font-weight:800; text-transform:uppercase; padding:2px 7px; border-radius:4px; letter-spacing:0.05em;
+}
+.admin-row .mini-badge.new{ background:var(--gold-bright); color:var(--bg-void); }
+.admin-row .mini-badge.sale{ background:var(--wine-bright); color:var(--cream); }
+.admin-row .mini-badge.trending{ background:var(--denim); color:var(--cream); }
+.admin-row .row-actions{ display:flex; gap:8px; flex-shrink:0; }
+.icon-action-btn{
+  width:34px; height:34px; border-radius:7px; border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center; color:var(--ink-soft);
+  transition:border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+}
+.icon-action-btn svg{ width:15px; height:15px; }
+.icon-action-btn:hover{ border-color:var(--gold); color:var(--gold-bright); }
+.icon-action-btn.delete:hover{ border-color:var(--danger); color:#e08a85; background:rgba(193,85,79,0.1); }
+
+.admin-empty{ text-align:center; padding:40px 20px; color:var(--ink-faint); }
+
+.admin-footer-actions{ display:flex; gap:10px; justify-content:flex-end; padding:18px 26px; border-top:1px solid var(--line); flex-shrink:0; }
+
+/* image preview in form */
+.image-preview{
+  width:100%; height:140px; border-radius:8px; background:var(--bg-panel-2); border:1px solid var(--line);
+  display:flex; align-items:center; justify-content:center; color:var(--ink-faint); font-size:0.78rem;
+  background-size:cover; background-position:center; margin-top:10px; overflow:hidden; text-align:center; padding:10px;
+}
+
+/* confirm delete modal */
+.confirm-text{ color:var(--ink-soft); font-size:0.92rem; line-height:1.55; margin-bottom:4px; }
+.confirm-text strong{ color:var(--cream); }
+
+/* save spinner */
+.spinner{
+  width:16px; height:16px; border-radius:50%;
+  border:2px solid rgba(21,17,26,0.25); border-top-color:var(--bg-void);
+  animation:spin 0.7s linear infinite; display:inline-block;
+}
+
+@media (max-width:600px){
+  .admin-modal{ max-height:94vh; border-radius:14px; }
+  .admin-header{ padding:18px; }
+  .admin-body{ padding:18px; }
+  .admin-footer-actions{ padding:14px 18px; }
+}
+</style>
+</head>
+<body>
+  <div id="loader">
+  <div class="loader-mark">KRITIKA <span class="dot">•</span> COLLECTION</div>
+  <div class="loader-bar-track"><div class="loader-bar-fill"></div></div>
+  <div class="loader-caption">Jeans collection</div>
+</div>
+
+<canvas id="particles"></canvas>
+<div class="thread-cursor"></div>
+<div class="thread-cursor-ring"></div>
+<div id="toast-stack"></div>
+
+<nav>
+  <div class="nav-left">
+    <div class="brand-mark">KRITIKA <span class="dot">•</span> COLLECTION</div>
+    <div class="nav-links">
+      <a href="#shop">Shop</a>
+      <a href="#trending">Trending</a>
+      <a href="#about">About</a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="search-wrap">
+      <button class="icon-btn" id="searchToggle" aria-label="Search products">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </button>
+      <div class="search-panel" id="searchPanel">
+        <input type="text" id="searchInput" placeholder="Search jeans, washes, fits..." autocomplete="off">
+        <div class="search-results" id="searchResults"></div>
+      </div>
+    </div>
+    <button class="icon-btn" id="wishlistNavBtn" aria-label="View wishlist">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+      <span class="count-badge" id="wishlistBadge">0</span>
+    </button>
+    <button class="icon-btn" id="cartNavBtn" aria-label="View cart">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>
+      <span class="count-badge" id="cartBadge">0</span>
+    </button>
+  </div>
+</nav>
+
+<section class="hero-slider" id="heroSlider">
+
+  <div class="slide slide1 active" data-index="0">
+    <div class="slide-bg"></div>
+    <div class="slide-content">
+      <div class="slide-eyebrow">New Season · 2026</div>
+      <h1>Denim that<br>commands the <em>room.</em></h1>
+      <p>High-waist, body-sculpting fits crafted for women who don't ask for attention — they earn it. Premium stretch denim, finished by hand.</p>
+      <a href="#shop" class="slide-cta">Explore the Collection →</a>
+    </div>
+  </div>
+
+  <div class="slide slide2" data-index="1">
+    <div class="slide-bg"></div>
+    <div class="slide-content">
+      <div class="slide-eyebrow">Midnight Wash · Limited</div>
+      <h1>Bold fits.<br><em>Quiet</em> confidence.</h1>
+      <p>Our darkest washes yet — straight, flare, and bootcut silhouettes built for evenings that go past midnight.</p>
+      <a href="#shop" class="slide-cta">Shop Midnight Wash →</a>
+    </div>
+  </div>
+
+  <div class="slide slide3" data-index="2">
+    <div class="slide-bg"></div>
+    <div class="slide-content">
+      <div class="slide-eyebrow">Member Pricing</div>
+      <h1>Up to 30% off<br>select <em>styles.</em></h1>
+      <p>For a limited time, our most-loved fits are priced to move. Once they're gone, they're gone for the season.</p>
+      <a href="#shop" class="slide-cta">View the Sale →</a>
+    </div>
+  </div>
+
+  <button class="slider-arrow prev" id="sliderPrev" aria-label="Previous slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <button class="slider-arrow next" id="sliderNext" aria-label="Next slide">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+  </button>
+
+  <div class="slider-nav" id="sliderNav">
+    <button class="slider-dot active" data-index="0" aria-label="Slide 1"></button>
+    <button class="slider-dot" data-index="1" aria-label="Slide 2"></button>
+    <button class="slider-dot" data-index="2" aria-label="Slide 3"></button>
+  </div>
+
+  <div class="scroll-cue"><span>Scroll</span><div class="line"></div></div>
+</section>
+
+<section id="shop">
+  <div class="section-head reveal">
+    <div class="eyebrow">The Lineup</div>
+    <h2>Find your fit</h2>
+    <p>Filter by silhouette or wash, or search by name. Every style ships in sizes 26–36.</p>
+  </div>
+
+  <div class="filter-bar reveal" id="filterBar">
+    <button class="filter-chip active" data-filter="all">All</button>
+    <button class="filter-chip" data-filter="skinny">Skinny</button>
+    <button class="filter-chip" data-filter="slim">Slim</button>
+    <button class="filter-chip" data-filter="baggy">Baggy</button>
+    <button class="filter-chip" data-filter="flare">Flare</button>
+    <button class="filter-chip" data-filter="black">Black</button>
+    <button class="filter-chip" data-filter="blue">Blue</button>
+  </div>
+
+  <div class="product-grid" id="productGrid"></div>
+</section>
+
+<footer id="about">
+  <div class="brand-mark">KRITIKA <span class="dot">•</span> COLLECTION</div>
+  <div class="foot-links">
+    <a href="#shop">Shop</a>
+    <a href="#trending">Trending</a>
+    <a href="https://wa.me/910000000000">WhatsApp Us</a>
+    <button class="admin-entry-btn" id="adminEntryBtn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Admin
+    </button>
+  </div>
+  <div class="copyright">© 2026 Kritika Collection. Designed for the girls who know what they want.</div>
+</footer>
+
+<!-- ============================================================
+     ADMIN LOGIN MODAL
+============================================================ -->
+<div class="admin-overlay" id="adminLoginOverlay">
+  <div class="admin-modal small">
+    <div class="admin-header">
+      <div>
+        <h3>Admin sign in</h3>
+        <div class="sub">Manage your product catalog</div>
+      </div>
+      <button class="admin-close" id="adminLoginClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="admin-body">
+      <div class="admin-login-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </div>
+      <div class="field-group">
+        <label for="adminPassInput">Admin password</label>
+        <input type="password" id="adminPassInput" placeholder="Enter password" autocomplete="off">
+        <div class="field-error" id="adminLoginError">Incorrect password. Try again.</div>
+      </div>
+      <button class="btn-primary" id="adminLoginSubmit">Sign in</button>
+      <div class="field-hint" style="margin-top:14px; text-align:center;">Default password is <strong style="color:var(--ink-soft);">kritika2026</strong> — change it anytime from the dashboard.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     ADMIN DASHBOARD MODAL
+============================================================ -->
+<div class="admin-overlay" id="adminDashOverlay">
+  <div class="admin-modal">
+    <div class="admin-header">
+      <div>
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:20px;height:20px;color:var(--gold-bright);"><path d="M3 3h18v4H3z"/><path d="M3 11h18v10H3z"/><path d="M9 16h6"/></svg>
+          Catalog manager
+        </h3>
+        <div class="sub" id="adminDashSub">Loading your products…</div>
+      </div>
+      <button class="admin-close" id="adminDashClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="admin-body">
+      <div class="admin-toolbar">
+        <span class="stat-pill" id="adminStatPill">0 products</span>
+        <div style="display:flex; gap:10px;">
+          <button class="btn-secondary" id="adminChangePassBtn" style="font-size:0.78rem; padding:11px 16px;">Change password</button>
+          <button class="admin-add-btn" id="adminAddBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add product
+          </button>
+        </div>
+      </div>
+      <div class="admin-table" id="adminTable"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     ADD / EDIT PRODUCT MODAL
+============================================================ -->
+<div class="admin-overlay" id="productFormOverlay">
+  <div class="admin-modal small">
+    <div class="admin-header">
+      <div>
+        <h3 id="productFormTitle">Add product</h3>
+        <div class="sub">Fill in the style details below</div>
+      </div>
+      <button class="admin-close" id="productFormClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="admin-body">
+      <div class="field-group">
+        <label for="pfName">Product name</label>
+        <input type="text" id="pfName" placeholder="e.g. Skyline Skinny">
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label for="pfFit">Fit / silhouette</label>
+          <select id="pfFit">
+            <option value="skinny">Skinny</option>
+            <option value="slim">Slim</option>
+            <option value="baggy">Baggy</option>
+            <option value="flare">Flare</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <label for="pfWash">Wash colour</label>
+          <select id="pfWash">
+            <option value="blue">Blue</option>
+            <option value="black">Black</option>
+          </select>
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="pfDesc">Short description</label>
+        <textarea id="pfDesc" placeholder="e.g. High-waist skinny fit, 4-way stretch denim."></textarea>
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label for="pfPrice">Price (₹)</label>
+          <input type="number" id="pfPrice" placeholder="999" min="0">
+        </div>
+        <div class="field-group">
+          <label for="pfMrp">Original price (₹) <span style="text-transform:none; font-weight:500;">— optional</span></label>
+          <input type="number" id="pfMrp" placeholder="Leave blank if no discount" min="0">
+        </div>
+      </div>
+      <div class="field-group">
+        <label for="pfBadge">Tag</label>
+        <select id="pfBadge">
+          <option value="">None</option>
+          <option value="new">New</option>
+          <option value="sale">Sale</option>
+          <option value="trending">Trending</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label for="pfImage">Photo URL <span style="text-transform:none; font-weight:500;">— optional</span></label>
+        <input type="text" id="pfImage" placeholder="https://example.com/photo.jpg">
+        <div class="field-hint">Paste a direct image link. Leave blank to use a plain colour swatch instead.</div>
+        <div class="image-preview" id="pfImagePreview">No photo — a colour swatch will be used</div>
+      </div>
+      <div class="field-error" id="productFormError"></div>
+    </div>
+    <div class="admin-footer-actions">
+      <button class="btn-secondary" id="productFormCancel">Cancel</button>
+      <button class="btn-primary" id="productFormSave" style="width:auto; padding:13px 26px;">Save product</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     CHANGE PASSWORD MODAL
+============================================================ -->
+<div class="admin-overlay" id="changePassOverlay">
+  <div class="admin-modal small">
+    <div class="admin-header">
+      <div><h3>Change admin password</h3></div>
+      <button class="admin-close" id="changePassClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="admin-body">
+      <div class="field-group">
+        <label for="newPassInput">New password</label>
+        <input type="password" id="newPassInput" placeholder="At least 4 characters">
+      </div>
+      <div class="field-group">
+        <label for="newPassConfirm">Confirm new password</label>
+        <input type="password" id="newPassConfirm" placeholder="Re-enter password">
+      </div>
+      <div class="field-error" id="changePassError"></div>
+      <button class="btn-primary" id="changePassSubmit">Update password</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     DELETE CONFIRM MODAL
+============================================================ -->
+<div class="admin-overlay" id="deleteConfirmOverlay">
+  <div class="admin-modal small">
+    <div class="admin-header">
+      <div><h3>Remove this style?</h3></div>
+      <button class="admin-close" id="deleteConfirmClose" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="admin-body">
+      <p class="confirm-text">This will remove <strong id="deleteConfirmName"></strong> from the shop for everyone. This can't be undone.</p>
+    </div>
+    <div class="admin-footer-actions">
+      <button class="btn-secondary" id="deleteConfirmCancel">Cancel</button>
+      <button class="btn-danger" id="deleteConfirmSubmit" style="padding:13px 22px;">Remove style</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var hasFinePointer = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+
+  /* ============================================================
+     DEFAULT PRODUCT DATA — used only the first time, before any
+     admin edits exist in shared storage
+  ============================================================ */
+  var DEFAULT_PRODUCTS = [
+    { id:1, name:"Skyline Skinny", cat:["skinny","blue"], desc:"High-waist skinny fit, 4-way stretch denim.", price:899, mrp:1299, badge:"trending", swatch:"sw-a", image:"https://www.only.in/cdn/shop/files/902289501_g0_7402abb6-5fa6-4bb5-821a-7f29dc15f5d9.jpg?v=1771999072&width=1080" },
+    { id:2, name:"Midnight Flare", cat:["flare","black"], desc:"Flattering flare from the knee, deep wash.", price:1099, mrp:null, badge:"new", swatch:"sw-b", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRgUDjyg8PuAxMJNvQbQwJ4l_2bpJ8bfCLJAg&s" },
+    { id:3, name:"Cloud Wash Baggy", cat:["baggy","blue"], desc:"Relaxed baggy fit in a light cloud wash.", price:999, mrp:null, badge:"new", swatch:"sw-c", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTr9x6FaRBPI1J8aID3Roag4lx1eUCWQtv7mw&s" },
+    { id:4, name:"Raven Slim", cat:["slim","black"], desc:"Distressed slim-fit denim, bold dark wash.", price:1199, mrp:1499, badge:"sale", swatch:"sw-d", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL3Y4TcwDXRLxo75VrvU7A68AH7qhPhi_5NA&s" },
+    { id:5, name:"Onyx Skinny", cat:["skinny","black"], desc:"Jet black skinny fit with subtle stretch.", price:949, mrp:null, badge:null, swatch:"sw-f", image:"https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcTfqPMQ0abww3OOguQ0jDVJ6QipBZyWWvDhxSXBKvrr02vC-ZZNUWWMkSZt6G_IKgbylydr6duWD6JuqEEpuLr1v4lOpmNUwy127wrYyY_L" },
+    { id:6, name:"Dune Baggy", cat:["baggy","blue"], desc:"Sand-washed baggy fit, oversized pockets.", price:1049, mrp:1349, badge:"sale", swatch:"sw-e", image:"https://offduty.in/cdn/shop/files/IMG_6177_FL_REMOVED_d8540f82-7017-42f2-abdc-8f448ce74d56.jpg?format=webp&quality=80&v=1769088338&width=3840" },
+    { id:7, name:"Azure Slim", cat:["slim","blue"], desc:"Classic slim fit in a crisp mid-blue wash.", price:879, mrp:null, badge:null, swatch:"sw-c", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMa7iJGPN3figIgGhZJeMvXn3Vsq8NRCOFNA&s" },
+    { id:8, name:"Eclipse Flare", cat:["flare","black"], desc:"All-black flare with a high, sculpting waist.", price:1149, mrp:null, badge:"trending", swatch:"sw-f", image:"https://media.istockphoto.com/id/1001890502/photo/girl-looking-at-lunar-eclipse-through-a-telescope-my-astronomy-work.jpg?s=612x612&w=0&k=20&c=3nUUPLT_7mZ_SZfnd9vifqGjJS7ujoxq1BXsvspd9LU=" },
+    { id:9, name:"Frost Skinny", cat:["skinny","blue"], desc:"Light frost wash, second-skin stretch fit.", price:929, mrp:null, badge:null, swatch:"sw-a", image:"https://img01.ztat.net/article/spp-media-p1/1081728f278249c6916fdecc56d3507a/3cea3141ef5e47b987fe11b4262db888.jpg?imwidth=762" },
+    { id:10, name:"Storm Baggy", cat:["baggy","black"], desc:"Charcoal baggy fit with raw hem detail.", price:1099, mrp:1399, badge:"sale", swatch:"sw-d", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRNMlOXzeXLgxW3dFOjEl_xBitYgJaKS2wLAg&s" },
+    { id:11, name:"Velvet Slim", cat:["slim","black"], desc:"Soft-touch slim fit, brushed black denim.", price:1029, mrp:null, badge:"new", swatch:"sw-b", image:"https://manishmalhotra.in/cdn/shop/files/MMN-LH-79814-89092_C-XS-4.jpg?v=1770619189&width=1445" },
+    { id:12, name:"Horizon Flare", cat:["flare","blue"], desc:"70s-inspired flare in a sun-washed blue.", price:1199, mrp:null, badge:"trending", swatch:"sw-c", image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSv5EUNtpnwoQuMiFYrzSq1ZNIKcuRWttSspg&s" }
+  ];
+
+  var SWATCH_POOL = ["sw-a","sw-b","sw-c","sw-d","sw-e","sw-f"];
+  var STORAGE_KEY = "kritika:catalog";
+  var PASS_KEY = "kritika:admin-pass";
+  var DEFAULT_PASSWORD = "kritika2026";
+
+  var state = {
+    products: [],
+    wishlist: new Set(),
+    cart: 0,
+    activeFilter: "all",
+    isAdmin: false,
+    editingId: null,
+    deletingId: null,
+    storageReady: false
+  };
+
+  /* ============================================================
+     STORAGE HELPERS (shared — visible to all visitors)
+  ============================================================ */
+  function hasStorage(){
+    return typeof window.storage !== "undefined" && window.storage;
+  }
+
+  function loadCatalog(){
+    if(!hasStorage()){
+      state.products = DEFAULT_PRODUCTS.slice();
+      state.storageReady = false;
+      renderGrid();
+      return Promise.resolve();
+    }
+    return window.storage.get(STORAGE_KEY, true).then(function(res){
+      if(res && res.value){
+        try{
+          var parsed = JSON.parse(res.value);
+          state.products = Array.isArray(parsed) && parsed.length ? parsed : DEFAULT_PRODUCTS.slice();
+        }catch(e){
+          state.products = DEFAULT_PRODUCTS.slice();
+        }
+      } else {
+        state.products = DEFAULT_PRODUCTS.slice();
+      }
+      state.storageReady = true;
+      renderGrid();
+    }).catch(function(){
+      state.products = DEFAULT_PRODUCTS.slice();
+      state.storageReady = false;
+      renderGrid();
+    });
+  }
+
+  function saveCatalog(){
+    if(!hasStorage()){
+      return Promise.resolve(false);
+    }
+    return window.storage.set(STORAGE_KEY, JSON.stringify(state.products), true).then(function(res){
+      return !!res;
+    }).catch(function(){
+      return false;
+    });
+  }
+
+  function loadPassword(){
+    if(!hasStorage()) return Promise.resolve(DEFAULT_PASSWORD);
+    return window.storage.get(PASS_KEY, true).then(function(res){
+      return (res && res.value) ? res.value : DEFAULT_PASSWORD;
+    }).catch(function(){
+      return DEFAULT_PASSWORD;
+    });
+  }
+
+  function savePassword(pass){
+    if(!hasStorage()) return Promise.resolve(false);
+    return window.storage.set(PASS_KEY, pass, true).then(function(res){
+      return !!res;
+    }).catch(function(){
+      return false;
+    });
+  }
+
+  /* ============================================================
+     RENDER PRODUCT GRID (storefront)
+  ============================================================ */
+  var grid = document.getElementById('productGrid');
+
+  function badgeMarkup(badge){
+    if(!badge) return '';
+    var label = badge === 'new' ? 'New' : badge === 'sale' ? 'Sale' : 'Trending';
+    return '<span class="badge ' + badge + '">' + label + '</span>';
+  }
+
+  function priceMarkup(p){
+    if(p.mrp){
+      return '<span class="strike">\u20B9' + p.mrp + '</span>\u20B9' + p.price;
+    }
+    return '\u20B9' + p.price;
+  }
+
+  function mediaStyle(p){
+    if(p.image){
+      return 'background-image:url(\'' + escapeAttr(p.image) + '\')';
+    }
+    return '';
+  }
+
+  function mediaClass(p){
+    return p.image ? '' : (p.swatch || 'sw-a');
+  }
+
+  function escapeAttr(str){
+    return String(str).replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+  }
+
+  function renderGrid(){
+    if(state.products.length === 0){
+      grid.innerHTML = '<div class="empty-state"><h3>No styles yet</h3><p>Products added from the admin panel will show up here.</p></div>';
+      return;
+    }
+
+    grid.innerHTML = state.products.map(function(p, i){
+      var delay = (i % 4) * 0.08;
+      return (
+        '<div class="product-card reveal stagger" style="--d:' + delay + 's" data-id="' + p.id + '" data-cats="' + p.cat.join(',') + '">' +
+          '<div class="card-media ' + mediaClass(p) + '" style="' + mediaStyle(p) + '">' +
+            '<div class="card-badges">' + badgeMarkup(p.badge) + '</div>' +
+            '<button class="wishlist-btn" data-id="' + p.id + '" aria-label="Add to wishlist">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>' +
+            '</button>' +
+            '<div class="card-tag-name">' + escapeHtml(p.name) + '</div>' +
+          '</div>' +
+          '<div class="card-body">' +
+            '<div class="card-cat">' + p.cat.join(' \u00B7 ') + '</div>' +
+            '<div class="card-desc">' + escapeHtml(p.desc) + '</div>' +
+            '<div class="card-price-row">' +
+              '<div class="card-price">' + priceMarkup(p) + '</div>' +
+              '<button class="add-cart-btn" data-id="' + p.id + '">' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>' +
+                '<span>Add</span>' +
+              '</button>' +
+            '</div>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+
+    applyFilter();
+    attachCardObservers();
+    attachCardEvents();
+    observeReveals();
+  }
+
+  /* ============================================================
+     FILTER BAR
+  ============================================================ */
+  var filterBar = document.getElementById('filterBar');
+  filterBar.addEventListener('click', function(e){
+    var chip = e.target.closest('.filter-chip');
+    if(!chip) return;
+    filterBar.querySelectorAll('.filter-chip').forEach(function(c){ c.classList.remove('active'); });
+    chip.classList.add('active');
+    state.activeFilter = chip.getAttribute('data-filter');
+    applyFilter();
+  });
+
+  function applyFilter(){
+    var cards = grid.querySelectorAll('.product-card');
+    cards.forEach(function(card){
+      var cats = card.getAttribute('data-cats').split(',');
+      var match = state.activeFilter === 'all' || cats.indexOf(state.activeFilter) !== -1;
+      card.classList.toggle('hidden-by-filter', !match);
+    });
+  }
+
+  /* ============================================================
+     CARD EVENTS (wishlist + add to cart) — delegated
+  ============================================================ */
+  function attachCardEvents(){
+    grid.querySelectorAll('.wishlist-btn').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        var id = parseInt(btn.getAttribute('data-id'), 10);
+        toggleWishlist(id, btn);
+      });
+    });
+    grid.querySelectorAll('.add-cart-btn').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.stopPropagation();
+        var id = parseInt(btn.getAttribute('data-id'), 10);
+        addToCart(id, btn);
+      });
+    });
+  }
+
+  function getProduct(id){
+    for(var i=0;i<state.products.length;i++){ if(state.products[i].id === id) return state.products[i]; }
+    return null;
+  }
+
+  function toggleWishlist(id, btn){
+    var product = getProduct(id);
+    var nowActive;
+    if(state.wishlist.has(id)){
+      state.wishlist.delete(id);
+      nowActive = false;
+    } else {
+      state.wishlist.add(id);
+      nowActive = true;
+    }
+    btn.classList.toggle('active', nowActive);
+    if(!reducedMotion){
+      btn.classList.remove('pop');
+      requestAnimationFrame(function(){ btn.classList.add('pop'); });
+    }
+    updateWishlistBadge();
+    if(nowActive && product){
+      showToast('wishlist', '<strong>' + escapeHtml(product.name) + '</strong> added to your wishlist');
+    }
+  }
+
+  function updateWishlistBadge(){
+    var badge = document.getElementById('wishlistBadge');
+    var count = state.wishlist.size;
+    badge.textContent = count;
+    badge.classList.toggle('show', count > 0);
+    if(!reducedMotion){
+      badge.classList.remove('bump');
+      requestAnimationFrame(function(){ badge.classList.add('bump'); });
+    }
+  }
+
+  function addToCart(id, btn){
+    var product = getProduct(id);
+    state.cart += 1;
+    updateCartBadge();
+    if(product){
+      showToast('cart', 'Added <strong>' + escapeHtml(product.name) + '</strong> to your cart');
+    }
+    var label = btn.querySelector('span');
+    var original = label.textContent;
+    btn.classList.add('added');
+    label.textContent = 'Added';
+    setTimeout(function(){
+      btn.classList.remove('added');
+      label.textContent = original;
+    }, 1300);
+  }
+
+  function updateCartBadge(){
+    var badge = document.getElementById('cartBadge');
+    badge.textContent = state.cart;
+    badge.classList.toggle('show', state.cart > 0);
+    if(!reducedMotion){
+      badge.classList.remove('bump');
+      requestAnimationFrame(function(){ badge.classList.add('bump'); });
+    }
+  }
+
+  document.getElementById('wishlistNavBtn').addEventListener('click', function(){
+    if(state.wishlist.size === 0){
+      showToast('wishlist', 'Your wishlist is empty — tap the heart on any style to save it');
+    } else {
+      showToast('wishlist', 'You have <strong>' + state.wishlist.size + '</strong> item' + (state.wishlist.size>1?'s':'') + ' saved');
+    }
+  });
+  document.getElementById('cartNavBtn').addEventListener('click', function(){
+    if(state.cart === 0){
+      showToast('cart', 'Your cart is empty — add a style to get started');
+    } else {
+      showToast('cart', 'You have <strong>' + state.cart + '</strong> item' + (state.cart>1?'s':'') + ' in your cart');
+    }
+  });
+
+  /* ============================================================
+     TOAST NOTIFICATIONS
+  ============================================================ */
+  var toastStack = document.getElementById('toast-stack');
+  var cartIconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.7 13.4a2 2 0 0 0 2 1.6h9.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>';
+  var heartIconSvg = '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.8 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>';
+  var errorIconSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
+
+  function showToast(kind, html){
+    var toast = document.createElement('div');
+    toast.className = 'toast ' + kind;
+    var icon = kind === 'wishlist' ? heartIconSvg : kind === 'error' ? errorIconSvg : cartIconSvg;
+    toast.innerHTML =
+      '<div class="icon">' + icon + '</div>' +
+      '<div class="text">' + html + '</div>';
+    toastStack.appendChild(toast);
+
+    var lifespan = reducedMotion ? 50 : 3400;
+    setTimeout(function(){
+      toast.classList.add('leaving');
+      toast.addEventListener('animationend', function(){ toast.remove(); }, { once:true });
+    }, lifespan);
+
+    var toasts = toastStack.querySelectorAll('.toast');
+    if(toasts.length > 3){
+      toasts[0].remove();
+    }
+  }
+
+  /* ============================================================
+     SEARCH
+  ============================================================ */
+  var searchToggle = document.getElementById('searchToggle');
+  var searchPanel = document.getElementById('searchPanel');
+  var searchInput = document.getElementById('searchInput');
+  var searchResults = document.getElementById('searchResults');
+
+  searchToggle.addEventListener('click', function(e){
+    e.stopPropagation();
+    var willOpen = !searchPanel.classList.contains('open');
+    searchPanel.classList.toggle('open', willOpen);
+    if(willOpen){ searchInput.focus(); renderSearchResults(''); }
+  });
+  document.addEventListener('click', function(e){
+    if(!searchPanel.contains(e.target) && e.target !== searchToggle){
+      searchPanel.classList.remove('open');
+    }
+  });
+  searchInput.addEventListener('input', function(){
+    renderSearchResults(searchInput.value.trim().toLowerCase());
+  });
+
+  function renderSearchResults(query){
+    var matches = state.products.filter(function(p){
+      if(!query) return true;
+      return p.name.toLowerCase().indexOf(query) !== -1 ||
+             p.cat.join(' ').indexOf(query) !== -1 ||
+             p.desc.toLowerCase().indexOf(query) !== -1;
+    }).slice(0, 6);
+
+    if(matches.length === 0){
+      searchResults.innerHTML = '<div class="search-empty">No styles match "' + escapeHtml(query) + '"</div>';
+      return;
+    }
+    searchResults.innerHTML = matches.map(function(p){
+      var swStyle = p.image ? 'background-image:url(\'' + escapeAttr(p.image) + '\')' : '';
+      var swClass = p.image ? '' : (p.swatch || 'sw-a');
+      return (
+        '<div class="search-result-item" data-id="' + p.id + '">' +
+          '<div class="swatch ' + swClass + '" style="' + swStyle + '"></div>' +
+          '<div class="meta"><div class="name">' + escapeHtml(p.name) + '</div><div class="price">\u20B9' + p.price + '</div></div>' +
+        '</div>'
+      );
+    }).join('');
+
+    searchResults.querySelectorAll('.search-result-item').forEach(function(item){
+      item.addEventListener('click', function(){
+        var id = item.getAttribute('data-id');
+        searchPanel.classList.remove('open');
+        var card = grid.querySelector('.product-card[data-id="' + id + '"]');
+        if(card){
+          document.getElementById('shop').scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block:'center' });
+          setTimeout(function(){
+            card.style.transition = 'box-shadow 0.3s ease, border-color 0.3s ease';
+            card.style.borderColor = 'var(--gold)';
+            card.style.boxShadow = '0 0 0 2px rgba(201,162,95,0.4)';
+            setTimeout(function(){
+              card.style.borderColor = '';
+              card.style.boxShadow = '';
+            }, 1600);
+          }, 500);
+        }
+      });
+    });
+  }
+
+  function escapeHtml(str){
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  /* ============================================================
+     HERO SLIDER
+  ============================================================ */
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var dots = Array.prototype.slice.call(document.querySelectorAll('.slider-dot'));
+  var sliderIndex = 0;
+  var sliderTimer = null;
+  var SLIDE_DURATION = 6000;
+
+  function goToSlide(index){
+    sliderIndex = (index + slides.length) % slides.length;
+    slides.forEach(function(s, i){ s.classList.toggle('active', i === sliderIndex); });
+    dots.forEach(function(d, i){ d.classList.toggle('active', i === sliderIndex); });
+    restartAutoplay();
+  }
+
+  function restartAutoplay(){
+    if(sliderTimer) clearInterval(sliderTimer);
+    if(reducedMotion) return;
+    sliderTimer = setInterval(function(){ goToSlide(sliderIndex + 1); }, SLIDE_DURATION);
+  }
+
+  document.getElementById('sliderPrev').addEventListener('click', function(){ goToSlide(sliderIndex - 1); });
+  document.getElementById('sliderNext').addEventListener('click', function(){ goToSlide(sliderIndex + 1); });
+  dots.forEach(function(dot){
+    dot.addEventListener('click', function(){ goToSlide(parseInt(dot.getAttribute('data-index'), 10)); });
+  });
+  restartAutoplay();
+
+  /* ============================================================
+     CUSTOM CURSOR
+  ============================================================ */
+  var cursorDot = document.querySelector('.thread-cursor');
+  var cursorRing = document.querySelector('.thread-cursor-ring');
+  if(hasFinePointer && !reducedMotion && cursorDot && cursorRing){
+    var mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+    window.addEventListener('mousemove', function(e){
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursorDot.style.left = mouseX + 'px';
+      cursorDot.style.top = mouseY + 'px';
+    });
+    function ringLoop(){
+      ringX += (mouseX - ringX) * 0.18;
+      ringY += (mouseY - ringY) * 0.18;
+      cursorRing.style.left = ringX + 'px';
+      cursorRing.style.top = ringY + 'px';
+      requestAnimationFrame(ringLoop);
+    }
+    ringLoop();
+
+    function bindGrow(el){
+      el.addEventListener('mouseenter', function(){ cursorRing.classList.add('grow'); });
+      el.addEventListener('mouseleave', function(){ cursorRing.classList.remove('grow'); });
+    }
+    function rebindCursorTargets(){
+      document.querySelectorAll('a, button, .product-card').forEach(bindGrow);
+    }
+    rebindCursorTargets();
+    window._rebindCursorTargets = rebindCursorTargets;
+  } else {
+    window._rebindCursorTargets = function(){};
+  }
+
+  /* ============================================================
+     3D TILT ON PRODUCT CARDS
+  ============================================================ */
+  function attachCardObservers(){
+    if(!hasFinePointer || reducedMotion) return;
+    grid.querySelectorAll('.product-card').forEach(function(card){
+      card.addEventListener('mousemove', function(e){
+        var rect = card.getBoundingClientRect();
+        var px = (e.clientX - rect.left) / rect.width - 0.5;
+        var py = (e.clientY - rect.top) / rect.height - 0.5;
+        card.style.transform = 'rotateX(' + (py * -6) + 'deg) rotateY(' + (px * 8) + 'deg) translateY(-4px)';
+      });
+      card.addEventListener('mouseleave', function(){
+        card.style.transform = '';
+      });
+    });
+    if(window._rebindCursorTargets) window._rebindCursorTargets();
+  }
+
+  /* ============================================================
+     NAV SCROLLED STATE
+  ============================================================ */
+  var nav = document.querySelector('nav');
+  function onScroll(){
+    nav.classList.toggle('scrolled', window.scrollY > 30);
+  }
+  window.addEventListener('scroll', onScroll, { passive:true });
+
+  /* ============================================================
+     SCROLL REVEAL
+  ============================================================ */
+  var io = ('IntersectionObserver' in window) ? new IntersectionObserver(function(entries){
+    entries.forEach(function(entry){
+      if(entry.isIntersecting){
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold:0.12 }) : null;
+
+  function observeReveals(){
+    var els = document.querySelectorAll('.reveal:not(.in)');
+    if(io){
+      els.forEach(function(el){ io.observe(el); });
+    } else {
+      els.forEach(function(el){ el.classList.add('in'); });
+    }
+  }
+
+  /* ============================================================
+     AMBIENT PARTICLES — gold thread-flecks drifting upward
+  ============================================================ */
+  var canvas = document.getElementById('particles');
+  var ctx = canvas.getContext('2d');
+  var particles = [];
+  var PARTICLE_COUNT = reducedMotion ? 0 : (window.innerWidth < 700 ? 26 : 55);
+
+  function resizeCanvas(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  function makeParticle(){
+    return {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: 0.6 + Math.random() * 1.8,
+      speed: 0.15 + Math.random() * 0.4,
+      drift: (Math.random() - 0.5) * 0.3,
+      alpha: 0.15 + Math.random() * 0.35,
+      hue: Math.random() > 0.5 ? '201,162,95' : '140,59,79'
+    };
+  }
+  function initParticles(){
+    resizeCanvas();
+    particles = [];
+    for(var i=0;i<PARTICLE_COUNT;i++){ particles.push(makeParticle()); }
+  }
+  function tickParticles(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(function(p){
+      p.y -= p.speed;
+      p.x += p.drift;
+      if(p.y < -10){ p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + p.hue + ',' + p.alpha + ')';
+      ctx.fill();
+    });
+    requestAnimationFrame(tickParticles);
+  }
+  if(PARTICLE_COUNT > 0){
+    initParticles();
+    tickParticles();
+    window.addEventListener('resize', function(){
+      resizeCanvas();
+    }, { passive:true });
+  }
+
+  /* ============================================================
+     LOADER
+  ============================================================ */
+  var loader = document.getElementById('loader');
+  function hideLoader(){
+    loader.classList.add('hide');
+  }
+  if(reducedMotion){
+    hideLoader();
+  } else {
+    window.addEventListener('load', function(){ setTimeout(hideLoader, 600); });
+    setTimeout(hideLoader, 2400);
+  }
+
+  /* ============================================================
+     ============================================================
+     ADMIN PANEL LOGIC
+     ============================================================
+  ============================================================ */
+  var adminEntryBtn = document.getElementById('adminEntryBtn');
+  var adminLoginOverlay = document.getElementById('adminLoginOverlay');
+  var adminLoginClose = document.getElementById('adminLoginClose');
+  var adminPassInput = document.getElementById('adminPassInput');
+  var adminLoginSubmit = document.getElementById('adminLoginSubmit');
+  var adminLoginError = document.getElementById('adminLoginError');
+
+  var adminDashOverlay = document.getElementById('adminDashOverlay');
+  var adminDashClose = document.getElementById('adminDashClose');
+  var adminDashSub = document.getElementById('adminDashSub');
+  var adminStatPill = document.getElementById('adminStatPill');
+  var adminAddBtn = document.getElementById('adminAddBtn');
+  var adminChangePassBtn = document.getElementById('adminChangePassBtn');
+  var adminTable = document.getElementById('adminTable');
+
+  var productFormOverlay = document.getElementById('productFormOverlay');
+  var productFormClose = document.getElementById('productFormClose');
+  var productFormCancel = document.getElementById('productFormCancel');
+  var productFormSave = document.getElementById('productFormSave');
+  var productFormTitle = document.getElementById('productFormTitle');
+  var productFormError = document.getElementById('productFormError');
+  var pfName = document.getElementById('pfName');
+  var pfFit = document.getElementById('pfFit');
+  var pfWash = document.getElementById('pfWash');
+  var pfDesc = document.getElementById('pfDesc');
+  var pfPrice = document.getElementById('pfPrice');
+  var pfMrp = document.getElementById('pfMrp');
+  var pfBadge = document.getElementById('pfBadge');
+  var pfImage = document.getElementById('pfImage');
+  var pfImagePreview = document.getElementById('pfImagePreview');
+
+  var changePassOverlay = document.getElementById('changePassOverlay');
+  var changePassClose = document.getElementById('changePassClose');
+  var newPassInput = document.getElementById('newPassInput');
+  var newPassConfirm = document.getElementById('newPassConfirm');
+  var changePassError = document.getElementById('changePassError');
+  var changePassSubmit = document.getElementById('changePassSubmit');
+
+  var deleteConfirmOverlay = document.getElementById('deleteConfirmOverlay');
+  var deleteConfirmClose = document.getElementById('deleteConfirmClose');
+  var deleteConfirmCancel = document.getElementById('deleteConfirmCancel');
+  var deleteConfirmSubmit = document.getElementById('deleteConfirmSubmit');
+  var deleteConfirmName = document.getElementById('deleteConfirmName');
+
+  function openOverlay(el){ el.classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeOverlay(el){
+    el.classList.remove('open');
+    var anyOpen = document.querySelectorAll('.admin-overlay.open').length > 0;
+    if(!anyOpen) document.body.style.overflow = '';
+  }
+
+  // close on backdrop click
+  [adminLoginOverlay, adminDashOverlay, productFormOverlay, changePassOverlay, deleteConfirmOverlay].forEach(function(ov){
+    ov.addEventListener('click', function(e){
+      if(e.target === ov) closeOverlay(ov);
+    });
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      [adminLoginOverlay, adminDashOverlay, productFormOverlay, changePassOverlay, deleteConfirmOverlay].forEach(function(ov){
+        if(ov.classList.contains('open')) closeOverlay(ov);
+      });
+    }
+  });
+
+  // entry point
+  adminEntryBtn.addEventListener('click', function(){
+    if(state.isAdmin){
+      openAdminDashboard();
+    } else {
+      adminPassInput.value = '';
+      adminLoginError.classList.remove('show');
+      openOverlay(adminLoginOverlay);
+      setTimeout(function(){ adminPassInput.focus(); }, 50);
+    }
+  });
+  adminLoginClose.addEventListener('click', function(){ closeOverlay(adminLoginOverlay); });
+
+  function attemptLogin(){
+    var entered = adminPassInput.value;
+    adminLoginSubmit.disabled = true;
+    var originalText = adminLoginSubmit.textContent;
+    adminLoginSubmit.innerHTML = '<span class="spinner"></span>';
+    loadPassword().then(function(correctPass){
+      if(entered === correctPass){
+        state.isAdmin = true;
+        adminLoginError.classList.remove('show');
+        closeOverlay(adminLoginOverlay);
+        openAdminDashboard();
+      } else {
+        adminLoginError.classList.add('show');
+      }
+    }).finally(function(){
+      adminLoginSubmit.disabled = false;
+      adminLoginSubmit.textContent = originalText;
+    });
+  }
+  adminLoginSubmit.addEventListener('click', attemptLogin);
+  adminPassInput.addEventListener('keydown', function(e){
+    if(e.key === 'Enter') attemptLogin();
+  });
+
+  // dashboard
+  function openAdminDashboard(){
+    renderAdminTable();
+    openOverlay(adminDashOverlay);
+  }
+  adminDashClose.addEventListener('click', function(){ closeOverlay(adminDashOverlay); });
+
+  function renderAdminTable(){
+    var count = state.products.length;
+    adminStatPill.textContent = count + ' product' + (count === 1 ? '' : 's');
+    adminDashSub.textContent = state.storageReady
+      ? 'Changes save instantly and are visible to everyone who visits the shop.'
+      : 'Storage isn\'t available right now \u2014 changes will only last for this session.';
+
+    if(count === 0){
+      adminTable.innerHTML = '<div class="admin-empty">No products yet. Click "Add product" to create your first style.</div>';
+      return;
+    }
+
+    adminTable.innerHTML = state.products.map(function(p){
+      var thumbStyle = p.image ? 'background-image:url(\'' + escapeAttr(p.image) + '\')' : '';
+      var thumbClass = p.image ? '' : (p.swatch || 'sw-a');
+      var badgeHtml = p.badge ? '<span class="mini-badge ' + p.badge + '">' + (p.badge === 'new' ? 'New' : p.badge === 'sale' ? 'Sale' : 'Trending') + '</span>' : '';
+      var priceText = p.mrp ? ('\u20B9' + p.price + ' (was \u20B9' + p.mrp + ')') : ('\u20B9' + p.price);
+      return (
+        '<div class="admin-row" data-id="' + p.id + '">' +
+          '<div class="thumb ' + thumbClass + '" style="' + thumbStyle + '"></div>' +
+          '<div class="info">' +
+            '<div class="name">' + escapeHtml(p.name) + badgeHtml + '</div>' +
+            '<div class="meta-line">' + p.cat.join(' \u00B7 ') + ' \u2014 ' + priceText + '</div>' +
+          '</div>' +
+          '<div class="row-actions">' +
+            '<button class="icon-action-btn edit-btn" data-id="' + p.id + '" aria-label="Edit">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>' +
+            '</button>' +
+            '<button class="icon-action-btn delete delete-btn" data-id="' + p.id + '" aria-label="Delete">' +
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg>' +
+            '</button>' +
+          '</div>' +
+        '</div>'
+      );
+    }).join('');
+
+    adminTable.querySelectorAll('.edit-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var id = parseInt(btn.getAttribute('data-id'), 10);
+        openProductForm(id);
+      });
+    });
+    adminTable.querySelectorAll('.delete-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var id = parseInt(btn.getAttribute('data-id'), 10);
+        var product = getProduct(id);
+        state.deletingId = id;
+        deleteConfirmName.textContent = product ? product.name : 'this style';
+        openOverlay(deleteConfirmOverlay);
+      });
+    });
+  }
+
+  // change password flow
+  adminChangePassBtn.addEventListener('click', function(){
+    newPassInput.value = ''; newPassConfirm.value = '';
+    changePassError.classList.remove('show');
+    openOverlay(changePassOverlay);
+  });
+  changePassClose.addEventListener('click', function(){ closeOverlay(changePassOverlay); });
+  changePassSubmit.addEventListener('click', function(){
+    var p1 = newPassInput.value, p2 = newPassConfirm.value;
+    if(p1.length < 4){
+      changePassError.textContent = 'Password must be at least 4 characters.';
+      changePassError.classList.add('show');
+      return;
+    }
+    if(p1 !== p2){
+      changePassError.textContent = 'Passwords do not match.';
+      changePassError.classList.add('show');
+      return;
+    }
+    changePassSubmit.disabled = true;
+    var original = changePassSubmit.textContent;
+    changePassSubmit.innerHTML = '<span class="spinner"></span>';
+    savePassword(p1).then(function(ok){
+      changePassSubmit.disabled = false;
+      changePassSubmit.textContent = original;
+      if(ok){
+        closeOverlay(changePassOverlay);
+        showToast('cart', 'Admin password updated');
+      } else {
+        changePassError.textContent = 'Could not save right now. Please try again.';
+        changePassError.classList.add('show');
+      }
+    });
+  });
+
+  // delete flow
+  deleteConfirmClose.addEventListener('click', function(){ closeOverlay(deleteConfirmOverlay); });
+  deleteConfirmCancel.addEventListener('click', function(){ closeOverlay(deleteConfirmOverlay); });
+  deleteConfirmSubmit.addEventListener('click', function(){
+    if(state.deletingId == null) return;
+    var idx = state.products.findIndex(function(p){ return p.id === state.deletingId; });
+    if(idx === -1) return;
+    var removed = state.products[idx];
+    deleteConfirmSubmit.disabled = true;
+    var original = deleteConfirmSubmit.textContent;
+    deleteConfirmSubmit.innerHTML = '<span class="spinner"></span>';
+    state.products.splice(idx, 1);
+    saveCatalog().then(function(ok){
+      deleteConfirmSubmit.disabled = false;
+      deleteConfirmSubmit.textContent = original;
+      closeOverlay(deleteConfirmOverlay);
+      renderAdminTable();
+      renderGrid();
+      if(ok || !state.storageReady){
+        showToast('cart', '<strong>' + escapeHtml(removed.name) + '</strong> removed from the shop');
+      } else {
+        showToast('error', 'Removed locally, but saving failed. Try again.');
+      }
+      state.deletingId = null;
+    });
+  });
+
+  // add / edit product form
+  function resetProductForm(){
+    pfName.value = '';
+    pfFit.value = 'skinny';
+    pfWash.value = 'blue';
+    pfDesc.value = '';
+    pfPrice.value = '';
+    pfMrp.value = '';
+    pfBadge.value = '';
+    pfImage.value = '';
+    productFormError.classList.remove('show');
+    updateImagePreview();
+  }
+
+  function openProductForm(editId){
+    resetProductForm();
+    if(editId != null){
+      var p = getProduct(editId);
+      if(p){
+        state.editingId = editId;
+        productFormTitle.textContent = 'Edit product';
+        pfName.value = p.name;
+        pfFit.value = p.cat.filter(function(c){ return ["skinny","slim","baggy","flare"].indexOf(c) !== -1; })[0] || 'skinny';
+        pfWash.value = p.cat.filter(function(c){ return ["blue","black"].indexOf(c) !== -1; })[0] || 'blue';
+        pfDesc.value = p.desc;
+        pfPrice.value = p.price;
+        pfMrp.value = p.mrp || '';
+        pfBadge.value = p.badge || '';
+        pfImage.value = p.image || '';
+      }
+    } else {
+      state.editingId = null;
+      productFormTitle.textContent = 'Add product';
+    }
+    updateImagePreview();
+    openOverlay(productFormOverlay);
+    setTimeout(function(){ pfName.focus(); }, 50);
+  }
+
+  adminAddBtn.addEventListener('click', function(){ openProductForm(null); });
+  productFormClose.addEventListener('click', function(){ closeOverlay(productFormOverlay); });
+  productFormCancel.addEventListener('click', function(){ closeOverlay(productFormOverlay); });
+
+  function updateImagePreview(){
+    var url = pfImage.value.trim();
+    if(url){
+      pfImagePreview.style.backgroundImage = "url('" + url.replace(/'/g, "\\'") + "')";
+      pfImagePreview.textContent = '';
+    } else {
+      pfImagePreview.style.backgroundImage = '';
+      pfImagePreview.textContent = 'No photo — a colour swatch will be used';
+    }
+  }
+  pfImage.addEventListener('input', updateImagePreview);
+
+  function nextSwatch(){
+    var i = state.products.length % SWATCH_POOL.length;
+    return SWATCH_POOL[i];
+  }
+
+  productFormSave.addEventListener('click', function(){
+    var name = pfName.value.trim();
+    var desc = pfDesc.value.trim();
+    var price = parseFloat(pfPrice.value);
+    var mrpRaw = pfMrp.value.trim();
+    var mrp = mrpRaw ? parseFloat(mrpRaw) : null;
+    var fit = pfFit.value;
+    var wash = pfWash.value;
+    var badge = pfBadge.value || null;
+    var image = pfImage.value.trim();
+
+    if(!name){
+      productFormError.textContent = 'Please enter a product name.';
+      productFormError.classList.add('show');
+      pfName.focus();
+      return;
+    }
+    if(!desc){
+      productFormError.textContent = 'Please add a short description.';
+      productFormError.classList.add('show');
+      pfDesc.focus();
+      return;
+    }
+    if(isNaN(price) || price <= 0){
+      productFormError.textContent = 'Please enter a valid price.';
+      productFormError.classList.add('show');
+      pfPrice.focus();
+      return;
+    }
+    if(mrp != null && (isNaN(mrp) || mrp <= price)){
+      productFormError.textContent = 'Original price must be higher than the current price.';
+      productFormError.classList.add('show');
+      pfMrp.focus();
+      return;
+    }
+    productFormError.classList.remove('show');
+
+    productFormSave.disabled = true;
+    var original = productFormSave.textContent;
+    productFormSave.innerHTML = '<span class="spinner"></span>';
+
+    if(state.editingId != null){
+      var existing = getProduct(state.editingId);
+      if(existing){
+        existing.name = name;
+        existing.cat = [fit, wash];
+        existing.desc = desc;
+        existing.price = price;
+        existing.mrp = mrp;
+        existing.badge = badge;
+        existing.image = image;
+      }
+    } else {
+      var newId = state.products.reduce(function(max, p){ return Math.max(max, p.id); }, 0) + 1;
+      state.products.push({
+        id: newId,
+        name: name,
+        cat: [fit, wash],
+        desc: desc,
+        price: price,
+        mrp: mrp,
+        badge: badge,
+        swatch: nextSwatch(),
+        image: image
+      });
+    }
+
+    saveCatalog().then(function(ok){
+      productFormSave.disabled = false;
+      productFormSave.textContent = original;
+      closeOverlay(productFormOverlay);
+      renderAdminTable();
+      renderGrid();
+      var verb = state.editingId != null ? 'updated' : 'added';
+      if(ok || !state.storageReady){
+        showToast('cart', '<strong>' + escapeHtml(name) + '</strong> ' + verb + ' successfully');
+      } else {
+        showToast('error', 'Saved locally, but syncing failed. Try again.');
+      }
+      state.editingId = null;
+    });
+  });
+
+  /* ============================================================
+     INIT
+  ============================================================ */
+  loadCatalog();
+
+})();
+</script>
+
+</body>
+</html>
