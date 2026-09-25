@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ROLEX — A Crown For Every Lifetime · Concept Atelier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   ROLEX CONCEPT ATELIER — unofficial tribute / design study
+   ============================================================ */
+:root{
+  --ivory:#F2EEE3; --paper:#EAE5D7; --ink:#12170F; --ink-soft:#4A4F45;
+  --green:#0B3D2E; --green-deep:#072A20; --green-black:#051D16;
+  --gold:#B08D4C; --gold-hi:#E7CE93; --gold-lo:#7E6128;
+  --line:rgba(18,23,15,.14); --line-gold:rgba(176,141,76,.45);
+  --serif:'Cormorant Garamond',serif; --sans:'Manrope',sans-serif; --mono:'IBM Plex Mono',monospace;
+  --ease:cubic-bezier(.22,.72,.16,1);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ivory);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::selection{background:var(--gold);color:var(--green-black)}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;background:none;border:none;color:inherit}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:var(--paper)}
+::-webkit-scrollbar-thumb{background:var(--green);border:2px solid var(--paper)}
+
+/* film grain */
+.grain{position:fixed;inset:-100px;pointer-events:none;z-index:180;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 9s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-40px,30px)}50%{transform:translate(30px,-50px)}75%{transform:translate(-25px,-20px)}100%{transform:translate(0,0)}}
+
+/* progress bar */
+#progress{position:fixed;top:0;left:0;height:2px;width:0;background:linear-gradient(90deg,var(--gold-lo),var(--gold-hi));z-index:170}
+
+/* ---------- type helpers ---------- */
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.34em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:14px}
+.eyebrow::before{content:"";width:34px;height:1px;background:var(--gold)}
+.sec-num{font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--ink-soft)}
+h1,h2,h3{font-family:var(--serif);font-weight:500;line-height:1.02}
+.h-xl{font-size:clamp(46px,7.2vw,108px);letter-spacing:-.01em}
+.h-lg{font-size:clamp(34px,4.6vw,64px)}
+em.g{font-style:italic;color:var(--gold)}
+.dark em.g{color:var(--gold-hi)}
+
+/* reveals */
+[data-rv]{opacity:0;transform:translateY(30px);transition:opacity .9s ease,transform .9s var(--ease);transition-delay:var(--d,0s)}
+[data-rv].in{opacity:1;transform:none}
+.lm{display:block;overflow:hidden}
+.lm>span{display:block;transform:translateY(115%);transition:transform 1.05s var(--ease);transition-delay:var(--d,0s)}
+.in .lm>span,.lm.in>span{transform:none}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:12px;padding:16px 30px;font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;border:1px solid var(--green);color:var(--green);position:relative;overflow:hidden;transition:color .45s var(--ease)}
+.btn::before{content:"";position:absolute;inset:0;background:var(--green);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease);z-index:-1}
+.btn:hover{color:var(--ivory)}.btn:hover::before{transform:scaleX(1)}
+.btn.solid{background:var(--green);color:var(--ivory)}
+.btn.solid::before{background:var(--gold)}
+.btn.solid:hover{color:var(--green-black);border-color:var(--gold)}
+.btn.gold{border-color:var(--gold-hi);color:var(--gold-hi)}
+.btn.gold::before{background:var(--gold-hi)}
+.btn.gold:hover{color:var(--green-black)}
+.link-arrow{font-size:12px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;display:inline-flex;gap:10px;align-items:center;border-bottom:1px solid var(--line-gold);padding-bottom:6px;transition:gap .35s var(--ease),border-color .35s}
+.link-arrow:hover{gap:18px;border-color:var(--gold)}
+
+/* ---------- header ---------- */
+.site-head{position:fixed;top:0;left:0;right:0;z-index:150;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:18px 40px;transition:transform .5s var(--ease),background .4s,box-shadow .4s;background:transparent}
+.site-head.scrolled{background:rgba(242,238,227,.94);box-shadow:0 1px 0 var(--line)}
+.site-head.hide{transform:translateY(-100%)}
+.head-links{display:flex;gap:32px}
+.head-links a{font-size:11px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft);position:relative;padding:4px 0}
+.head-links a::after{content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;background:var(--gold);transform:scaleX(0);transform-origin:right;transition:transform .4s var(--ease)}
+.head-links a:hover{color:var(--ink)}.head-links a:hover::after{transform:scaleX(1);transform-origin:left}
+.head-links.right{justify-content:flex-end;align-items:center}
+.logo{display:flex;flex-direction:column;align-items:center;gap:2px;color:var(--green)}
+.logo svg{width:44px;height:32px}
+.logo .word{font-weight:800;letter-spacing:.42em;font-size:16px;padding-left:.42em}
+.logo .sub{font-family:var(--mono);font-size:8px;letter-spacing:.5em;color:var(--gold);padding-left:.5em}
+.burger{display:none;flex-direction:column;gap:5px;width:30px}
+.burger i{height:2px;background:var(--ink);transition:.3s;display:block}
+.burger i:last-child{width:70%}
+.wish-bag{position:relative;display:inline-flex;align-items:center;gap:8px;font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
+.wish-bag .count{display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--green);color:var(--ivory);font-size:10px}
+.wish-bag .count.pop{animation:pop .45s var(--ease)}
+@keyframes pop{40%{transform:scale(1.5)}}
+
+/* ---------- menu overlay ---------- */
+.menu{position:fixed;inset:0;z-index:160;background:var(--green-deep);color:var(--ivory);display:flex;flex-direction:column;justify-content:center;padding:0 8vw;clip-path:inset(0 0 100% 0);transition:clip-path .7s var(--ease);visibility:hidden}
+.menu.open{clip-path:inset(0 0 0% 0);visibility:visible}
+.menu::after{content:"";position:absolute;right:-8%;top:-20%;width:60vw;height:60vw;border:1px solid rgba(231,206,147,.12);border-radius:50%;pointer-events:none}
+.menu-close{position:absolute;top:26px;right:40px;font-family:var(--mono);font-size:12px;letter-spacing:.3em;color:var(--gold-hi)}
+.menu nav a{display:flex;align-items:baseline;gap:24px;font-family:var(--serif);font-size:clamp(34px,5.5vw,66px);padding:12px 0;border-bottom:1px solid rgba(231,206,147,.12);transition:padding-left .4s var(--ease),color .3s;opacity:0;transform:translateY(30px)}
+.menu.open nav a{opacity:1;transform:none;transition:opacity .6s ease,transform .7s var(--ease),padding-left .4s var(--ease);transition-delay:var(--d)}
+.menu nav a small{font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--gold)}
+.menu nav a:hover{padding-left:22px;color:var(--gold-hi)}
+.menu-foot{margin-top:6vh;display:flex;gap:40px;font-family:var(--mono);font-size:11px;letter-spacing:.2em;color:rgba(242,238,227,.55)}
+
+/* ---------- HERO ---------- */
+.hero{min-height:100vh;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:40px;align-items:center;padding:130px 6vw 60px;position:relative}
+.hero-side{position:absolute;left:18px;top:50%;transform:rotate(180deg) translateY(50%);writing-mode:vertical-rl;font-family:var(--mono);font-size:10px;letter-spacing:.5em;color:var(--ink-soft);opacity:.7}
+.hero-copy .eyebrow{margin-bottom:26px}
+.hero-copy h1{margin-bottom:28px}
+.hero-sub{font-family:var(--mono);font-size:12px;letter-spacing:.28em;color:var(--green);margin-bottom:22px;min-height:18px}
+.hero-lede{max-width:46ch;color:var(--ink-soft);margin-bottom:36px;font-size:17px}
+.hero-ctas{display:flex;gap:26px;align-items:center;flex-wrap:wrap;margin-bottom:52px}
+.hero-meta{display:flex;border-top:1px solid var(--line)}
+.hero-meta div{padding:18px 26px 0 0;border-right:1px solid var(--line);margin-right:26px}
+.hero-meta div:last-child{border:none}
+.hero-meta b{font-family:var(--serif);font-size:26px;font-weight:600;display:block;line-height:1}
+.hero-meta span{font-family:var(--mono);font-size:10px;letter-spacing:.22em;color:var(--ink-soft);text-transform:uppercase}
+
+/* hero stage — certification plaque */
+.hero-stage{position:relative;display:grid;place-items:center;padding:64px 30px;background:radial-gradient(120% 120% at 50% 20%,#0E4A38 0%,var(--green-deep) 55%,var(--green-black) 100%);border:1px solid var(--line-gold);box-shadow:0 40px 80px -30px rgba(5,29,22,.55)}
+.hero-stage .corner{position:absolute;width:14px;height:14px;border:1px solid var(--line-gold)}
+.corner.tl{top:10px;left:10px;border-right:none;border-bottom:none}
+.corner.tr{top:10px;right:10px;border-left:none;border-bottom:none}
+.corner.bl{bottom:10px;left:10px;border-right:none;border-top:none}
+.corner.br{bottom:10px;right:10px;border-left:none;border-top:none}
+.plaque{position:absolute;font-family:var(--mono);font-size:9px;letter-spacing:.3em;color:rgba(231,206,147,.6)}
+.plaque.top{top:20px;left:0;right:0;text-align:center}
+.plaque.bot{bottom:18px;left:0;right:0;text-align:center}
+.chip{position:absolute;font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--gold-hi);border:1px solid var(--line-gold);background:rgba(5,29,22,.6);padding:8px 14px;backdrop-filter:blur(2px);z-index:5;transition:transform .2s linear}
+.chip.c1{top:14%;left:6%}.chip.c2{bottom:16%;right:6%}
+.ring-text{position:absolute;width:min(46vw,560px);height:min(46vw,560px);z-index:1;animation:spin 70s linear infinite;pointer-events:none}
+.ring-text text{fill:rgba(231,206,147,.5);font-family:var(--mono);font-size:11.5px;letter-spacing:4px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ---------- THE WATCH (CSS/JS movement) ---------- */
+.watch{--w:300px;position:relative;width:var(--w);aspect-ratio:1;z-index:2;filter:drop-shadow(0 34px 44px rgba(0,0,0,.5))}
+.watch *{position:absolute}
+.w-crown{left:99.5%;top:50%;width:6.5%;height:9%;transform:translate(-15%,-50%);border-radius:22%;background:repeating-linear-gradient(180deg,var(--m3) 0 2px,var(--m2) 2px 4px);box-shadow:2px 3px 8px rgba(0,0,0,.4)}
+.w-case{inset:0;border-radius:50%;background:conic-gradient(from 215deg,var(--m1),var(--m2) 22%,var(--m3) 38%,var(--m4) 60%,var(--m1) 82%,var(--m2));box-shadow:inset 0 2px 5px rgba(255,255,255,.75),inset 0 -4px 10px rgba(0,0,0,.35)}
+.w-bezel{inset:4.6%;border-radius:50%}
+.w-bezel.bz-fluted{background:repeating-conic-gradient(from 0deg,var(--fA) 0 3deg,var(--fB) 3deg 6deg);box-shadow:inset 0 0 0 1px rgba(0,0,0,.28)}
+.w-bezel.bz-smooth{background:conic-gradient(from 40deg,var(--m3),var(--m2),var(--m1),var(--m3));box-shadow:inset 0 0 0 1px rgba(0,0,0,.28)}
+.w-dial{inset:12.5%;border-radius:50%;background:radial-gradient(130% 130% at 32% 24%,var(--d-hi) 0%,var(--d) 52%,var(--d-lo) 100%);box-shadow:inset 0 0 0 2px rgba(0,0,0,.55),inset 0 6px 22px rgba(0,0,0,.45);overflow:hidden}
+.w-dial::before{content:"";inset:3.5%;border-radius:50%;background:repeating-conic-gradient(rgba(255,255,255,.35) 0 .5deg,transparent .5deg 6deg);-webkit-mask:radial-gradient(closest-side,transparent 91%,#000 92% 99%,transparent 100%);mask:radial-gradient(closest-side,transparent 91%,#000 92% 99%,transparent 100%);opacity:.5}
+.w-dial::after{content:"";inset:0;border-radius:50%;background:radial-gradient(60% 40% at 30% 16%,rgba(255,255,255,.22),transparent 60%);pointer-events:none}
+/* materials */
+.mat-steel{--m1:#F0EDE4;--m2:#9A958A;--m3:#FFFFFF;--m4:#7C776A;--fA:#EDEADF;--fB:#8F8A7E}
+.mat-gold{--m1:#F4DE9E;--m2:#8F6E26;--m3:#FFF3C8;--fA:#F6E3A5;--fB:#7E6122;--m4:#6E5417}
+.mat-everose{--m1:#F0BCA4;--m2:#9C5F43;--m3:#FFE0CE;--fA:#F2C6AE;--fB:#8A5238;--m4:#7C4830}
+.w-brand{inset:0;display:flex;flex-direction:column;align-items:center;pointer-events:none}
+.w-brand svg{position:relative;top:23.5%;width:9%;color:var(--d-ink);opacity:.95}
+.w-brand .wm{position:relative;top:24%;font-weight:800;font-size:calc(var(--w)*.032);letter-spacing:.32em;color:var(--d-ink);padding-left:.32em}
+.w-brand .sm{position:relative;top:60%;font-family:var(--mono);font-size:calc(var(--w)*.0165);letter-spacing:.22em;color:var(--d-ink);opacity:.6;text-transform:uppercase;text-align:center;line-height:1.7}
+/* markers */
+.w-marker{inset:0;transform:rotate(var(--a))}
+.w-marker i{left:50%;top:5.5%;width:3.4%;height:11%;transform:translateX(-50%);border-radius:2px;background:linear-gradient(180deg,var(--lum,#FFF7E0),var(--lum2,#C9A558));box-shadow:0 0 5px rgba(0,0,0,.6),inset 0 0 2px rgba(0,0,0,.3)}
+.w-marker.mk12 i{width:7%;clip-path:polygon(0 0,100% 0,50% 100%);box-shadow:none}
+.w-date{right:8.5%;top:50%;transform:translateY(-50%);width:9.5%;height:8.5%;background:#F6F3EA;border:1px solid rgba(0,0,0,.55);border-radius:6%;display:grid;place-items:center;font-weight:700;font-size:calc(var(--w)*.038);color:#181B14;box-shadow:inset 0 0 3px rgba(0,0,0,.35)}
+/* hands */
+.w-hand{inset:0}
+.w-hand i{left:50%;bottom:50%;transform:translateX(-50%);border-radius:40%/12%;background:linear-gradient(90deg,var(--h1,#7C6224),var(--h2,#F3E2AB) 45%,var(--h1,#8A6D2A));box-shadow:0 2px 6px rgba(0,0,0,.55)}
+.w-hour i{width:3.8%;height:26%}
+.w-min i{width:2.9%;height:38%}
+.w-sec{inset:0}
+.w-sec i{left:50%;bottom:50%;transform:translateX(-50%);width:1%;height:44%;background:var(--gold-hi);box-shadow:0 0 4px rgba(0,0,0,.5)}
+.w-sec b{left:50%;top:50%;transform:translateX(-50%);width:2%;height:11%;background:var(--gold-hi);border-radius:3px}
+.w-cap{left:50%;top:50%;width:6%;height:6%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 35% 30%,var(--h2,#F3E2AB),var(--h1,#7C6224));box-shadow:0 0 5px rgba(0,0,0,.6)}
+.rotor{inset:12.5%;border-radius:50%;background:conic-gradient(from 0deg,rgba(231,206,147,.92) 0 34%,transparent 34%);opacity:0;pointer-events:none}
+.rotor.spin{animation:rotorspin 1.7s var(--ease) both}
+@keyframes rotorspin{0%{opacity:.95;transform:rotate(-140deg)}100%{opacity:0;transform:rotate(280deg)}}
+/* bracelet strip (configurator) */
+.bracelet{width:44%;height:120px;margin:-14px auto 0;border-radius:6px 6px 0 0;position:relative;z-index:0;transition:background .5s;box-shadow:inset 0 -14px 24px rgba(0,0,0,.35)}
+.bracelet::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(180deg,rgba(0,0,0,.3) 0 1px,rgba(255,255,255,.14) 1px 2px,transparent 2px 24px)}
+.b-oyster{background:linear-gradient(90deg,var(--m2) 0 26%,var(--m3) 26% 74%,var(--m2) 74%)}
+.b-jubilee{background:linear-gradient(90deg,var(--m2) 0 14%,var(--m3) 14% 32%,var(--m2) 32% 36%,var(--m3) 36% 64%,var(--m2) 64% 68%,var(--m3) 68% 86%,var(--m2) 86%)}
+.b-president{background:linear-gradient(90deg,var(--m2) 0 8%,var(--m3) 8% 30%,var(--m2) 30% 34%,var(--m3) 34% 66%,var(--m2) 66% 70%,var(--m3) 70% 92%,var(--m2) 92%)}
+
+/* ---------- marquee ---------- */
+.marquee{background:var(--green-deep);border-block:1px solid var(--line-gold);overflow:hidden;padding:16px 0}
+.marquee-track{display:flex;gap:0;width:max-content;animation:mq 26s linear infinite}
+.marquee span{font-family:var(--mono);font-size:12px;letter-spacing:.42em;color:var(--gold-hi);white-space:nowrap;padding-right:48px;display:flex;align-items:center;gap:48px}
+.marquee span::after{content:"✦";color:var(--gold);font-size:10px}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ---------- sections ---------- */
+section{position:relative}
+.wrap{max-width:1380px;margin:0 auto;padding:0 6vw}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:30px;margin-bottom:54px;flex-wrap:wrap}
+
+/* collections */
+.collections{padding:110px 0 90px}
+.filters{display:flex;gap:8px;border:1px solid var(--line);padding:5px}
+.filters button{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;padding:9px 18px;color:var(--ink-soft);transition:.3s}
+.filters button[aria-pressed="true"]{background:var(--green);color:var(--ivory)}
+.coll-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:34px}
+.card{position:relative;display:flex;flex-direction:column}
+.card.featured{grid-column:span 2;grid-row:span 2}
+.card-media{position:relative;overflow:hidden;aspect-ratio:4/4.6;display:block;background:var(--paper)}
+.card.featured .card-media{aspect-ratio:auto;height:100%;min-height:520px}
+.card-media img{width:100%;height:100%;object-fit:cover;transform:scale(1.02);transition:transform 1.4s var(--ease);filter:saturate(.92)}
+.card:hover .card-media img{transform:scale(1.09)}
+.card.featured .card-media img{animation:breathe 14s ease-in-out infinite alternate}
+@keyframes breathe{from{transform:scale(1.02)}to{transform:scale(1.1)}}
+.card-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,29,22,.25),transparent 30%,transparent 65%,rgba(5,29,22,.6));opacity:.8;transition:opacity .5s}
+.card:hover .card-media::after{opacity:1}
+.card-tag{position:absolute;left:16px;top:16px;z-index:2;font-family:var(--mono);font-size:9px;letter-spacing:.28em;color:var(--ivory);border:1px solid rgba(242,238,227,.5);padding:7px 12px;background:rgba(5,29,22,.35)}
+.card-cat{position:absolute;left:16px;bottom:16px;z-index:2;font-family:var(--mono);font-size:10px;letter-spacing:.3em;color:var(--gold-hi);text-transform:uppercase}
+.card.hidden{display:none}
+.card.pop-in{animation:cardIn .55s var(--ease) both}
+@keyframes cardIn{from{opacity:0;transform:translateY(18px) scale(.985)}}
+.card-info{padding:20px 2px 0;border-top:none}
+.card-top{display:flex;justify-content:space-between;font-family:var(--mono);font-size:10px;letter-spacing:.24em;color:var(--ink-soft);margin-bottom:8px}
+.card-info h3{font-size:clamp(24px,2vw,32px);margin-bottom:10px}
+.card.featured .card-info h3{font-size:clamp(30px,3vw,46px)}
+.card-meta{display:flex;justify-content:space-between;align-items:center;font-size:14px}
+.price{font-weight:700;letter-spacing:.06em}
+.discover{font-family:var(--mono);font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-lo);opacity:0;transform:translateX(-8px);transition:.4s var(--ease)}
+.card:hover .discover{opacity:1;transform:none}
+.wish{position:absolute;top:14px;right:14px;z-index:3;width:38px;height:38px;display:grid;place-items:center;border:1px solid rgba(242,238,227,.5);background:rgba(5,29,22,.4);color:var(--ivory);transition:.3s}
+.wish svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;transition:.3s}
+.wish.active{background:var(--gold);border-color:var(--gold);color:var(--green-black)}
+.wish.active svg{fill:currentColor}
+.wish:active svg{animation:pop .4s}
+
+/* ---------- anatomy (sticky) ---------- */
+.anatomy{background:var(--green-deep);color:var(--ivory);padding:120px 0}
+.anatomy .eyebrow{color:var(--gold-hi)}.anatomy .eyebrow::before{background:var(--gold-hi)}
+.anat-grid{display:grid;grid-template-columns:1fr 1fr;gap:6vw}
+.anat-stick{position:sticky;top:110px;height:calc(100vh - 180px);display:grid;place-items:center}
+.anat-frame{position:relative;width:min(420px,80%);aspect-ratio:1;display:grid;place-items:center;background:radial-gradient(circle at 50% 40%,rgba(231,206,147,.08),transparent 65%),repeating-linear-gradient(0deg,rgba(231,206,147,.05) 0 1px,transparent 1px 44px),repeating-linear-gradient(90deg,rgba(231,206,147,.05) 0 1px,transparent 1px 44px);border:1px solid rgba(231,206,147,.2)}
+.anat-frame .tick{position:absolute;font-family:var(--mono);font-size:9px;letter-spacing:.3em;color:rgba(231,206,147,.5)}
+.anat-frame .tick.a{top:10px;left:12px}.anat-frame .tick.b{bottom:10px;right:12px}
+.focus-ring{position:absolute;border:1.5px solid var(--gold-hi);border-radius:50%;box-shadow:0 0 0 6px rgba(231,206,147,.08),0 0 30px rgba(231,206,147,.25);transition:all .8s var(--ease);pointer-events:none}
+.focus-tag{position:absolute;left:14px;bottom:14px;display:flex;align-items:center;gap:12px;font-family:var(--mono);font-size:11px;letter-spacing:.24em;text-transform:uppercase;color:var(--gold-hi)}
+.focus-tag b{font-size:13px}
+.steps .step{min-height:62vh;display:flex;flex-direction:column;justify-content:center;border-bottom:1px solid rgba(231,206,147,.12);padding:40px 0;opacity:.3;transition:opacity .5s}
+.steps .step.active{opacity:1}
+.step .n{font-family:var(--mono);font-size:12px;letter-spacing:.3em;color:var(--gold-hi);margin-bottom:16px}
+.step h3{font-size:clamp(30px,3.4vw,52px);margin-bottom:18px}
+.step p{max-width:44ch;color:rgba(242,238,227,.72)}
+.step ul{list-style:none;margin-top:22px;display:flex;gap:26px;flex-wrap:wrap}
+.step li{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:var(--gold-hi);border:1px solid rgba(231,206,147,.3);padding:8px 14px}
+
+/* ---------- numbers ---------- */
+.numbers{padding:100px 0;border-block:1px solid var(--line)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.stat{padding:10px 34px;border-right:1px solid var(--line)}
+.stat:first-child{padding-left:0}.stat:last-child{border:none}
+.stat b{font-family:var(--serif);font-size:clamp(40px,4.4vw,66px);font-weight:600;display:flex;align-items:baseline;gap:4px;line-height:1}
+.stat b small{font-size:.4em;color:var(--gold);font-family:var(--mono);letter-spacing:.1em}
+.stat span{font-family:var(--mono);font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-top:12px}
+
+/* ---------- materials ---------- */
+.materials{padding:110px 0}
+.mat-grid{display:grid;grid-template-columns:minmax(280px,.85fr) 1.4fr;gap:6vw;align-items:stretch}
+.mat-list{display:flex;flex-direction:column}
+.mat-list button{text-align:left;padding:22px 6px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:16px;font-family:var(--serif);font-size:clamp(20px,1.8vw,28px);color:var(--ink-soft);transition:.35s}
+.mat-list button .idx{font-family:var(--mono);font-size:10px;letter-spacing:.26em}
+.mat-list button:hover{padding-left:16px}
+.mat-list button.active{color:var(--ink);padding-left:16px}
+.mat-list button.active .idx{color:var(--gold)}
+.mat-panel{position:relative;min-height:460px;overflow:hidden;border:1px solid var(--line)}
+.mat-swatch{position:absolute;inset:0;transition:opacity .6s ease;background-size:200% 200%;animation:sheen 7s ease-in-out infinite alternate}
+@keyframes sheen{from{background-position:0% 0%}to{background-position:100% 100%}}
+.mat-swatch.fade{opacity:0}
+.mat-cap{position:absolute;left:0;right:0;bottom:0;padding:26px 30px;background:linear-gradient(180deg,transparent,rgba(5,29,22,.82) 40%);color:var(--ivory)}
+.mat-cap h3{font-size:clamp(26px,2.6vw,40px);margin-bottom:8px}
+.mat-cap p{max-width:52ch;font-size:14px;color:rgba(242,238,227,.85)}
+
+/* ---------- heritage timeline ---------- */
+.heritage{background:var(--paper);padding:110px 0 90px;overflow:hidden}
+.tl-shell{position:relative}
+.tl-track{display:flex;gap:0;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;cursor:grab}
+.tl-track::-webkit-scrollbar{display:none}
+.tl-track.drag{cursor:grabbing;scroll-snap-type:none}
+.tl-item{flex:0 0 min(420px,80vw);scroll-snap-align:start;padding:20px 44px 20px 0;border-right:1px solid var(--line);position:relative}
+.tl-item .year{font-family:var(--serif);font-size:clamp(70px,7vw,110px);font-weight:500;line-height:.9;color:transparent;-webkit-text-stroke:1px var(--gold);margin-bottom:20px}
+.tl-item:hover .year{color:var(--gold);transition:color .5s}
+.tl-item h3{font-size:24px;margin-bottom:10px}
+.tl-item p{font-size:14px;color:var(--ink-soft);max-width:38ch}
+.tl-item::before{content:"";position:absolute;top:30px;right:-4px;width:7px;height:7px;border-radius:50%;background:var(--gold)}
+.tl-nav{display:flex;gap:10px;align-items:center;margin-top:36px}
+.tl-btn{width:46px;height:46px;border:1px solid var(--ink);display:grid;place-items:center;font-size:18px;transition:.3s}
+.tl-btn:hover{background:var(--green);color:var(--ivory);border-color:var(--green)}
+.tl-bar{flex:1;height:1px;background:var(--line);position:relative;margin:0 20px}
+.tl-bar i{position:absolute;left:0;top:-1px;height:3px;width:10%;background:var(--gold);transition:width .2s}
+
+/* ---------- configurator ---------- */
+.config{background:var(--green-black);color:var(--ivory);padding:120px 0}
+.config .eyebrow{color:var(--gold-hi)}.config .eyebrow::before{background:var(--gold-hi)}
+.cfg-grid{display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:start;margin-top:20px}
+.cfg-preview{position:sticky;top:100px;display:flex;flex-direction:column;align-items:center;padding:50px 0 30px;border:1px solid rgba(231,206,147,.2);background:radial-gradient(80% 60% at 50% 30%,rgba(231,206,147,.09),transparent 70%)}
+.cfg-preview .watch{transition:transform .5s var(--ease)}
+.cfg-preview.pulse .watch{animation:cfgPulse .55s var(--ease)}
+@keyframes cfgPulse{35%{transform:scale(.965)}70%{transform:scale(1.015)}}
+.cfg-group{border-bottom:1px solid rgba(231,206,147,.15);padding:26px 0}
+.cfg-group>label{font-family:var(--mono);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--gold-hi);display:flex;justify-content:space-between;margin-bottom:18px}
+.cfg-group>label output{color:rgba(242,238,227,.6)}
+.opt-row{display:flex;gap:12px;flex-wrap:wrap}
+.opt{border:1px solid rgba(231,206,147,.3);padding:12px 18px;font-size:12px;letter-spacing:.12em;font-weight:600;transition:.3s;display:flex;align-items:center;gap:10px}
+.opt:hover{border-color:var(--gold-hi)}
+.opt.active{background:var(--gold-hi);color:var(--green-black);border-color:var(--gold-hi)}
+.swatch{width:22px;height:22px;border-radius:50%;border:2px solid rgba(242,238,227,.25);display:inline-block}
+.cfg-summary{margin-top:34px;border:1px solid rgba(231,206,147,.3);padding:26px 28px;background:rgba(231,206,147,.05)}
+.cfg-summary .ref{font-family:var(--mono);font-size:11px;letter-spacing:.3em;color:var(--gold-hi);margin-bottom:10px}
+.cfg-summary .total{font-family:var(--serif);font-size:clamp(34px,3.4vw,52px);font-weight:600;display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
+.cfg-summary .total small{font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:rgba(242,238,227,.55);text-align:right;line-height:1.8}
+.cfg-note{font-size:12px;color:rgba(242,238,227,.5);margin-top:14px}
+
+/* ---------- boutiques ---------- */
+.boutiques{padding:120px 0}
+.bq-grid{display:grid;grid-template-columns:1fr 1fr;gap:6vw}
+.bq-list{list-style:none;border-top:1px solid var(--line)}
+.bq-list li{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 4px;border-bottom:1px solid var(--line);transition:.3s}
+.bq-list li:hover{padding-left:14px;background:rgba(176,141,76,.06)}
+.bq-list b{font-family:var(--serif);font-size:22px;font-weight:500}
+.bq-list span{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--ink-soft);text-align:right}
+.form fieldset{border:none;display:flex;flex-direction:column;gap:22px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font-family:var(--mono);font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--ink-soft)}
+.field input,.field select,.field textarea{background:transparent;border:none;border-bottom:1px solid var(--line);padding:10px 2px;font-family:var(--sans);font-size:16px;color:var(--ink);outline:none;transition:border-color .3s;border-radius:0;appearance:none}
+.field textarea{resize:vertical;min-height:70px}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold)}
+.field.err input{border-color:#B0413C}
+.field .msg{font-size:11px;color:#B0413C;font-family:var(--mono);letter-spacing:.1em;display:none}
+.field.err .msg{display:block}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+.bq-success{border:1px solid var(--line-gold);padding:50px 40px;text-align:center;display:none}
+.bq-success.show{display:block;animation:cardIn .6s var(--ease)}
+.bq-success svg{width:64px;height:64px;margin:0 auto 20px;display:block}
+.ok-c{fill:none;stroke:var(--gold);stroke-width:1.5;stroke-dasharray:200;stroke-dashoffset:200}
+.ok-t{fill:none;stroke:var(--green);stroke-width:3;stroke-linecap:round;stroke-dasharray:48;stroke-dashoffset:48}
+.show .ok-c{animation:draw 1s var(--ease) forwards}
+.show .ok-t{animation:draw .6s .6s var(--ease) forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.bq-success h3{font-size:32px;margin-bottom:10px}
+.bq-success p{color:var(--ink-soft);font-size:14px;margin-bottom:24px}
+
+/* ---------- footer ---------- */
+footer{background:var(--green-black);color:var(--ivory);padding:100px 0 40px;position:relative;overflow:hidden}
+.foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:50px;position:relative;z-index:2}
+.foot-grid h4{font-family:var(--mono);font-size:10px;letter-spacing:.32em;text-transform:uppercase;color:var(--gold-hi);margin-bottom:22px}
+.foot-grid a{display:block;font-size:14px;color:rgba(242,238,227,.62);padding:5px 0;transition:.3s}
+.foot-grid a:hover{color:var(--gold-hi);padding-left:8px}
+.news{display:flex;border-bottom:1px solid rgba(231,206,147,.35);margin-top:18px}
+.news input{flex:1;background:none;border:none;color:var(--ivory);padding:12px 0;font-family:var(--sans);outline:none}
+.news button{color:var(--gold-hi);font-family:var(--mono);font-size:11px;letter-spacing:.24em}
+.ghost{position:absolute;bottom:-6vw;left:0;right:0;text-align:center;font-family:var(--serif);font-style:italic;font-size:24vw;line-height:1;color:transparent;-webkit-text-stroke:1px rgba(231,206,147,.12);pointer-events:none;z-index:1}
+.foot-base{margin-top:80px;padding-top:26px;border-top:1px solid rgba(231,206,147,.14);display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:.2em;color:rgba(242,238,227,.4);position:relative;z-index:2}
+
+/* ---------- toasts & cursor ---------- */
+#toasts{position:fixed;left:24px;bottom:24px;z-index:190;display:flex;flex-direction:column;gap:10px}
+.toast{background:var(--green-deep);color:var(--ivory);border-left:3px solid var(--gold-hi);padding:15px 22px;font-size:13px;letter-spacing:.04em;box-shadow:0 16px 40px rgba(0,0,0,.35);animation:toastIn .5s var(--ease);max-width:320px}
+.toast.out{animation:toastOut .4s var(--ease) forwards}
+@keyframes toastIn{from{opacity:0;transform:translateX(-30px)}}
+@keyframes toastOut{to{opacity:0;transform:translateX(-30px)}}
+.cursor-dot,.cursor-ring{position:fixed;top:0;left:0;pointer-events:none;z-index:200;border-radius:50%;transform:translate(-50%,-50%);display:none}
+body.has-cursor .cursor-dot,body.has-cursor .cursor-ring{display:block}
+body.has-cursor{cursor:none}
+body.has-cursor a,body.has-cursor button,body.has-cursor input,body.has-cursor select,body.has-cursor textarea,body.has-cursor label{cursor:none}
+.cursor-dot{width:6px;height:6px;background:var(--gold)}
+.cursor-ring{width:34px;height:34px;border:1px solid rgba(176,141,76,.7);transition:width .3s,height .3s,background .3s}
+.cursor-ring.hov{width:62px;height:62px;background:rgba(176,141,76,.1)}
+
+/* ---------- responsive ---------- */
+@media(max-width:1100px){
+  .coll-grid{grid-template-columns:repeat(2,1fr)}
+  .card.featured{grid-column:span 2;grid-row:span 1}
+  .card.featured .card-media{min-height:420px}
+  .stats{grid-template-columns:repeat(2,1fr);gap:34px 0}
+  .stat{padding:0 26px}.stat:nth-child(3){padding-left:0;border:none}
+}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr;padding-top:120px;gap:60px}
+  .hero-side{display:none}
+  .head-links{display:none}
+  .burger{display:flex}
+  .site-head{padding:14px 22px}
+  .anat-grid,.cfg-grid,.bq-grid,.mat-grid{grid-template-columns:1fr}
+  .anat-stick{position:relative;top:0;height:auto;margin-bottom:30px}
+  .steps .step{min-height:auto;padding:44px 0}
+  .cfg-preview{position:relative;top:0;margin-bottom:20px}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .f-row{grid-template-columns:1fr}
+}
+@media(max-width:620px){
+  .coll-grid{grid-template-columns:1fr}
+  .card.featured{grid-column:span 1}
+  .hero-meta{flex-wrap:wrap}.hero-meta div{border:none;padding-left:0}
+  .foot-grid{grid-template-columns:1fr}
+}
+/* ---------- reduced motion ---------- */
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
+  .marquee-track,.ring-text,.card.featured .card-media img,.mat-swatch,.grain{animation:none!important}
+  [data-rv]{opacity:1;transform:none}
+  .lm>span{transform:none}
+}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div id="progress"></div>
+<div class="cursor-dot" id="cDot"></div><div class="cursor-ring" id="cRing"></div>
+<div id="toasts" aria-live="polite"></div>
+
+<!-- crown svg symbol -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="crown" viewBox="0 0 200 150">
+    <g fill="currentColor">
+      <circle cx="100" cy="18" r="11"/><circle cx="52" cy="30" r="10"/><circle cx="148" cy="30" r="10"/>
+      <circle cx="16" cy="56" r="9"/><circle cx="184" cy="56" r="9"/>
+      <path d="M100 30 L117 102 L83 102 Z"/>
+      <path d="M52 42 L79 102 L47 102 Z"/><path d="M148 42 L153 102 L121 102 Z"/>
+      <path d="M16 66 L52 102 L28 102 Z"/><path d="M184 66 L172 102 L148 102 Z"/>
+      <path d="M24 108 L32 134 Q100 146 168 134 L176 108 Z"/>
+    </g>
+  </symbol>
+</svg>
+
+<!-- ============ HEADER ============ -->
+<header class="site-head" id="siteHead">
+  <nav class="head-links">
+    <a href="#collections">Collections</a>
+    <a href="#anatomy">Anatomy</a>
+  </nav>
+  <a class="logo" href="#top" aria-label="Rolex home">
+    <svg><use href="#crown"/></svg>
+    <span class="word">ROLEX</span><span class="sub">GENÈVE</span>
+  </a>
+  <nav class="head-links right">
+    <a href="#heritage">Heritage</a>
+    <a href="#configurator">Atelier</a>
+    <a class="wish-bag" href="#boutiques"><span>Wishlist</span><span class="count" id="wishCount">0</span></a>
+    <button class="burger" id="menuBtn" aria-label="Open menu"><i></i><i></i><i></i></button>
+  </nav>
+</header>
+
+<!-- ============ MENU OVERLAY ============ -->
+<div class="menu" id="menu" aria-hidden="true">
+  <button class="menu-close" id="menuClose">CLOSE ✕</button>
+  <nav>
+    <a href="#collections" style="--d:.08s" data-close><small>N°01</small>Collections</a>
+    <a href="#anatomy" style="--d:.14s" data-close><small>N°02</small>Anatomy of an Oyster</a>
+    <a href="#materials" style="--d:.20s" data-close><small>N°03</small>Materials</a>
+    <a href="#heritage" style="--d:.26s" data-close><small>N°04</small>Heritage</a>
+    <a href="#configurator" style="--d:.32s" data-close><small>N°05</small>The Atelier</a>
+    <a href="#boutiques" style="--d:.38s" data-close><small>N°06</small>Book a Fitting</a>
+  </nav>
+  <div class="menu-foot"><span>RUE DU RHÔNE · GENÈVE</span><span>MON–SAT 10:00–19:00</span><span>EST. 1905</span></div>
+</div>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="top">
+  <span class="hero-side">GENÈVE · SWITZERLAND · SINCE 1905</span>
+  <div class="hero-copy">
+    <p class="eyebrow" data-rv>Perpetual · Chronometer · Genève</p>
+    <h1 class="h-xl" data-rv style="--d:.1s">
+      <span class="lm"><span>A crown for</span></span>
+      <span class="lm" style="--d:.22s"><span>every <em class="g">lifetime.</em></span></span>
+    </h1>
+    <p class="hero-sub" data-scramble>SUPERLATIVE CHRONOMETER · OFFICIALLY CERTIFIED</p>
+    <p class="hero-lede" data-rv style="--d:.3s">For one hundred and twenty-one years the Oyster has sealed precision inside a single idea — that a watch is not worn to tell time, but to honour it. Each case is tested, chronometered and crowned in Geneva.</p>
+    <div class="hero-ctas" data-rv style="--d:.4s">
+      <a class="btn solid" href="#collections">Explore Collections</a>
+      <a class="link-arrow" href="#boutiques">Book a fitting <span>→</span></a>
+    </div>
+    <div class="hero-meta" data-rv style="--d:.5s">
+      <div><b>−2/+2</b><span>sec / day</span></div>
+      <div><b>70 h</b><span>power reserve</span></div>
+      <div><b>300 m</b><span>waterproof</span></div>
+    </div>
+  </div>
+
+  <div class="hero-stage" id="heroStage">
+    <span class="corner tl"></span><span class="corner tr"></span><span class="corner bl"></span><span class="corner br"></span>
+    <p class="plaque top">OBSERVATOIRE CHRONOMÉTRIQUE · Nº 1905 / 2026</p>
+    <svg class="ring-text" viewBox="0 0 300 300" aria-hidden="true">
+      <defs><path id="circPath" d="M150,150 m-122,0 a122,122 0 1,1 244,0 a122,122 0 1,1 -244,0"/></defs>
+      <text><textPath href="#circPath">SUPERLATIVE CHRONOMETER · PERPETUAL EXCELLENCE · GENÈVE · SWISS MADE · </textPath></text>
+    </svg>
+    <div class="watch mat-steel" data-watch style="--w:clamp(250px,27vw,380px);--d-hi:#3E4A44;--d:#151D1A;--d-lo:#060908;--d-ink:#EDE7D5" data-live></div>
+    <div class="chip c1" data-depth="14">CAL. 3235 · 31 JEWELS</div>
+    <div class="chip c2" data-depth="22">OYSTERSTEEL 904L</div>
+    <p class="plaque bot">SEALED 25 SEP 2026 · RATE −1 S/DAY</p>
+  </div>
+</section>
+
+<!-- marquee -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="mqTrack">
+    <span>PERPETUAL</span><span>SWISS MADE</span><span>OYSTER CASE</span><span>SUPERLATIVE CHRONOMETER</span><span>FLUTED BEZEL</span><span>EST. 1905</span>
+  </div>
+</div>
+
+<!-- ============ COLLECTIONS ============ -->
+<section class="collections wrap" id="collections">
+  <div class="sec-head">
+    <div>
+      <p class="eyebrow" data-rv>N°01 — The Collections</p>
+      <h2 class="h-lg" data-rv style="--d:.1s">Six ways to wear <em class="g">forever.</em></h2>
+    </div>
+    <div class="filters" role="tablist" data-rv style="--d:.2s" id="filterTabs">
+      <button aria-pressed="true" data-filter="all">All</button>
+      <button aria-pressed="false" data-filter="professional">Professional</button>
+      <button aria-pressed="false" data-filter="classic">Classic</button>
+    </div>
+  </div>
+
+  <div class="coll-grid" id="collGrid">
+    <article class="card featured" data-cat="professional" data-rv>
+      <button class="wish" data-wish="Submariner" aria-label="Wishlist Submariner"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.8-9.5-9C1 8.5 3 5 6.5 5c2 0 3.5 1 4.5 2.6C12 6 13.5 5 15.5 5 19 5 21 8.5 20.5 12c-1 4.2-8.5 9-8.5 9z"/></svg></button>
+      <a class="card-media" href="#configurator"><img src="https://picsum.photos/seed/rolex-submariner-dive/1200/1300" alt="Submariner Date" loading="lazy"><span class="card-tag">DIVE · 300 M</span><span class="card-cat">Professional</span></a>
+      <div class="card-info"><div class="card-top"><span>01 / OYSTER, 41 MM</span><span>REF. 126610LN</span></div>
+        <h3>Submariner Date</h3><div class="card-meta"><span class="price">$10,250</span><span class="discover">Discover →</span></div></div>
+    </article>
+
+    <article class="card" data-cat="professional" data-rv style="--d:.08s">
+      <button class="wish" data-wish="Daytona" aria-label="Wishlist Daytona"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.8-9.5-9C1 8.5 3 5 6.5 5c2 0 3.5 1 4.5 2.6C12 6 13.5 5 15.5 5 19 5 21 8.5 20.5 12c-1 4.2-8.5 9-8.5 9z"/></svg></button>
+      <a class="card-media" href="#configurator"><img src="https://picsum.photos/seed/rolex-daytona-racing/900/1050" alt="Cosmograph Daytona" loading="lazy"><span class="card-tag">CHRONOGRAPH</span><span class="card-cat">Professional</span></a>
+      <div class="card-info"><div class="card-top"><span>02 / OYSTER, 40 MM</span><span>REF. 126500LN</span></div>
+        <h3>Cosmograph Daytona</h3><div class="card-meta"><span class="price">$15,100</span><span class="discover">Discover →</span></div></div>
+    </article>
+
+    <article class="card" data-cat="professional" data-rv style="--d:.16s">
+      <button class="wish" data-wish="GMT-Master II" aria-label="Wishlist GMT"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.8-9.5-9C1 8.5 3 5 6.5 5c2 0 3.5 1 4.5 2.6C12 6 13.5 5 15.5 5 19 5 21 8.5 20.5 12c-1 4.2-8.5 9-8.5 9z"/></svg></button>
+      <a class="card-media" href="#configurator"><img src="https://picsum.photos/seed/rolex-gmt-travel/900/1050" alt="GMT-Master II" loading="lazy"><span class="card-tag">TWO TIME ZONES</span><span class="card-cat">Professional</span></a>
+      <div class="card-info"><div class="card-top"><span>03 / OYSTER, 40 MM</span><span>REF. 126710BLNR</span></div>
+        <h3>GMT-Master II</h3><div class="card-meta"><span class="price">$11,150</span><span class="discover">Discover →</span></div></div>
+    </article>
+
+    <article class="card" data-cat="classic" data-rv style="--d:.1s">
+      <button class="wish" data-wish="Day-Date 40" aria-label="Wishlist Day-Date"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.8-9.5-9C1 8.5 3 5 6.5 5c2 0 3.5 1 4.5 2.6C12 6 13.5 5 15.5 5 19 5 21 8.5 20.5 12c-1 4.2-8.5 9-8.5 9z"/></svg></button>
+      <a class="card-media" href="#configurator"><img src="https://picsum.photos/seed/rolex-daydate-gold/900/1050" alt="Day-Date 40" loading="lazy"><span class="card-tag">18 CT YELLOW GOLD</span><span class="card-cat">Classic</span></a>
+      <div class="card-info"><div class="card-top"><span>04 / OYSTER, 40 MM</span><span>REF. 228238</span></div>
+        <h3>Day-Date 40</h3><div class="card-meta"><span class="price">$41,200</span><span class="discover">Discover →</span></div></div>
+    </article>
+
+    <article class="card" data-cat="classic" data-rv style="--d:.18s">
+      <button class="wish" data-wish="Datejust 36" aria-label="Wishlist Datejust"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.8-9.5-9C1 8.5 3 5 6.5 5c2 0 3.5 1 4.5 2.6C12 6 13.5 5 15.5 5 19 5 21 8.5 20.5 12c-1 4.2-8.5 9-8.5 9z"/></svg></button>
+      <a class="card-media" href="#configurator"><img src="https://picsum.photos/seed/rolex-datejust-fluted/900/1050" alt="Datejust 36" loading="lazy"><span class="card-tag">FLUTED BEZEL</span><span class="card-cat">Classic</span></a>
+      <div class="card-info"><div class="card-top"><span>05 / OYSTER, 36 MM</span><span>REF. 126234</span></div>
+        <h3>Datejust 36</h3><div class="card-meta"><span class="price">$9,350</span><span class="discover">Discover →</span></div></div>
+    </article>
+
+    <article class="card" data-cat="classic" data-rv style="--d:.26s">
+      <button class="wish" data-wish="Oyster Perpetual" aria-label="Wishlist Oyster Perpetual"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.8-9.5-9C1 8.5 3 5 6.5 5c2 0 3.5 1 4.5 2.6C12 6 13.5 5 15.5 5 19 5 21 8.5 20.5 12c-1 4.2-8.5 9-8.5 9z"/></svg></button>
+      <a class="card-media" href="#configurator"><img src="https://picsum.photos/seed/rolex-oysterperpetual-pure/900/1050" alt="Oyster Perpetual 41" loading="lazy"><span class="card-tag">PURE OYSTERSTEEL</span><span class="card-cat">Classic</span></a>
+      <div class="card-info"><div class="card-top"><span>06 / OYSTER, 41 MM</span><span>REF. 124300</span></div>
+        <h3>Oyster Perpetual 41</h3><div class="card-meta"><span class="price">$6,450</span><span class="discover">Discover →</span></div></div>
+    </article>
+  </div>
+</section>
+
+<!-- ============ ANATOMY ============ -->
+<section class="anatomy" id="anatomy">
+  <div class="wrap">
+    <p class="eyebrow" data-rv>N°02 — Anatomy of an Oyster</p>
+    <h2 class="h-lg" data-rv style="--d:.1s" style="margin-bottom:20px">Five chambers of <em class="g">precision.</em></h2>
+    <div class="anat-grid">
+      <div class="anat-stick">
+        <div class="anat-frame" id="anatPanel">
+          <span class="tick a">SECTION A–A</span><span class="tick b">SCALE 8:1</span>
+          <div class="watch mat-gold" id="anatWatch" data-watch style="--w:min(300px,60vw);--d-hi:#20865A;--d:#0B5132;--d-lo:#04301D;--d-ink:#F0EAD8"></div>
+          <div class="focus-ring" id="focusRing"></div>
+          <div class="focus-tag"><b id="anatIdx">01</b><span id="focusName">Oystersteel Case</span></div>
+        </div>
+      </div>
+      <div class="steps" id="anatSteps">
+        <article class="step active" data-step="0"><span class="n">01 / CASE</span><h3>The Oyster case</h3><p>A hermetically sealed monobloc middle case machined from a block of 904L Oystersteel — an alloy normally reserved for aerospace and chemistry. Screwed down, it shrugs off pressure, dust and decades.</p><ul><li>904L STEEL</li><li>SCREW-DOWN</li><li>MONOBLOC</li></ul></article>
+        <article class="step" data-step="1"><span class="n">02 / BEZEL</span><h3>The fluted bezel</h3><p>Once a functional seal screwed onto the case, the fluting is now cut in precious metal with a precision of a few microns — 96 facets catching light the way Geneva catches snow.</p><ul><li>96 FACETS</li><li>18 CT GOLD</li><li>MICRON TOLERANCE</li></ul></article>
+        <article class="step" data-step="2"><span class="n">03 / DATE</span><h3>The Cyclops lens</h3><p>A sapphire lens bonded over the date window magnifies the numeral two-and-a-half times. Invented by Rolex in the early 1950s, it turned a complication into a silhouette.</p><ul><li>2.5× MAGNIFICATION</li><li>SAPPHIRE</li><li>ANTI-REFLECTIVE</li></ul></article>
+        <article class="step" data-step="3"><span class="n">04 / CROWN</span><h3>The Triplock crown</h3><p>Three sealed zones, three gaskets, one gesture. The winding crown screws into the case like a submarine hatch, completing a waterproof system guaranteed to 300 metres.</p><ul><li>TRIPLE GASKET</li><li>300 M</li><li>SCREW-LOCK</li></ul></article>
+        <article class="step" data-step="4"><span class="n">05 / MOVEMENT</span><h3>The Perpetual rotor</h3><p>Behind the case back, a free-swinging rotor harvests every motion of the wrist and banks it in the mainspring — seventy hours of autonomy, accurate to −2/+2 seconds a day.</p><ul><li>70 H RESERVE</li><li>31 JEWELS</li><li>PARACHROM HAIRSPRING</li></ul></article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NUMBERS ============ -->
+<section class="numbers">
+  <div class="wrap stats">
+    <div class="stat" data-rv><b><span data-count="121">0</span><small>YRS</small></b><span>Of perpetual excellence since 1905</span></div>
+    <div class="stat" data-rv style="--d:.1s"><b><span data-count="1.2" data-dec="1">0</span><small>M</small></b><span>Oyster watches crafted each year</span></div>
+    <div class="stat" data-rv style="--d:.2s"><b><span data-count="70">0</span><small>H</small></b><span>Power reserve, calibre 3235</span></div>
+    <div class="stat" data-rv style="--d:.3s"><b><span data-count="11000">0</span><small>M</small></b><span>Deepest certified dive, Deepsea Challenge</span></div>
+  </div>
+</section>
+
+<!-- ============ MATERIALS ============ -->
+<section class="materials wrap" id="materials">
+  <div class="sec-head">
+    <div>
+      <p class="eyebrow" data-rv>N°03 — Materials</p>
+      <h2 class="h-lg" data-rv style="--d:.1s">Cast in our own <em class="g">foundry.</em></h2>
+    </div>
+  </div>
+  <div class="mat-grid">
+    <div class="mat-list" id="matTabs" data-rv>
+      <button class="active" data-mat="steel"><span>Oystersteel</span><span class="idx">01</span></button>
+      <button data-mat="yellow"><span>Yellow Gold</span><span class="idx">02</span></button>
+      <button data-mat="everose"><span>Everose Gold</span><span class="idx">03</span></button>
+      <button data-mat="white"><span>White Gold</span><span class="idx">04</span></button>
+      <button data-mat="rolesor"><span>Rolesor</span><span class="idx">05</span></button>
+    </div>
+    <div class="mat-panel" data-rv style="--d:.15s">
+      <div class="mat-swatch" id="matSwatch"></div>
+      <div class="mat-cap"><h3 id="matName">Oystersteel</h3><p id="matDesc"></p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HERITAGE ============ -->
+<section class="heritage" id="heritage">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow" data-rv>N°04 — Heritage</p>
+        <h2 class="h-lg" data-rv style="--d:.1s">One hundred twenty-one years, <em class="g">eleven turning points.</em></h2>
+      </div>
+      <div class="tl-nav" data-rv style="--d:.2s">
+        <button class="tl-btn" id="tlPrev" aria-label="Previous">←</button>
+        <div class="tl-bar"><i id="tlBar"></i></div>
+        <button class="tl-btn" id="tlNext" aria-label="Next">→</button>
+      </div>
+    </div>
+  </div>
+  <div class="wrap tl-shell">
+    <div class="tl-track" id="tlTrack">
+      <div class="tl-item"><div class="year">1905</div><h3>The Vision</h3><p>Twenty-four-year-old Hans Wilsdorf founds the company in London, convinced the wristwatch can be as precise as any chronometer.</p></div>
+      <div class="tl-item"><div class="year">1910</div><h3>First Certificate</h3><p>A wristwatch receives the world's first official chronometer rating, granted by the School of Horology in Bienne.</p></div>
+      <div class="tl-item"><div class="year">1926</div><h3>The Oyster</h3><p>The world's first waterproof wristwatch is born — a hermetically sealed case of bezel, back and crown screwed onto the middle case.</p></div>
+      <div class="tl-item"><div class="year">1927</div><h3>The Channel</h3><p>Mercedes Gleitze swims the English Channel with an Oyster around her neck. Ten hours later, it keeps perfect time.</p></div>
+      <div class="tl-item"><div class="year">1931</div><h3>Perpetual</h3><p>The first self-winding mechanism with a free rotor is invented — the Perpetual movement that still winds every Oyster today.</p></div>
+      <div class="tl-item"><div class="year">1953</div><h3>Submariner & Everest</h3><p>The Submariner dives to 100 m, while an Oyster Perpetual accompanies the expedition that first summits Everest.</p></div>
+      <div class="tl-item"><div class="year">1956</div><h3>Day-Date</h3><p>The first wristwatch to spell out the day in full alongside the date. It would come to be worn by presidents.</p></div>
+      <div class="tl-item"><div class="year">1963</div><h3>Cosmograph Daytona</h3><p>Born for the endurance circuits of Florida, built to be the ultimate instrument of speed and the podium.</p></div>
+      <div class="tl-item"><div class="year">2022</div><h3>Deepsea Challenge</h3><p>Engineered to accompany dives to 11,000 metres — the full depth of the Mariana Trench, in grade-5 titanium.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONFIGURATOR ============ -->
+<section class="config" id="configurator">
+  <div class="wrap">
+    <p class="eyebrow" data-rv>N°05 — The Atelier</p>
+    <h2 class="h-lg" data-rv style="--d:.1s">Compose <em class="g">yours.</em></h2>
+    <div class="cfg-grid">
+      <div class="cfg-preview" id="cfgPreview" data-rv>
+        <div class="watch mat-steel" id="cfgWatch" data-watch style="--w:min(290px,70vw);--d-hi:#FDFDFB;--d:#D9D9D4;--d-lo:#9FA09A;--d-ink:#20241F"></div>
+        <div class="bracelet b-oyster mat-steel" id="cfgBracelet"></div>
+      </div>
+      <div data-rv style="--d:.15s">
+        <div class="cfg-group"><label>Case Material <output id="caseOut">Oystersteel · +$0</output></label>
+          <div class="opt-row" data-opt="case">
+            <button class="opt active" data-val="steel">Oystersteel</button>
+            <button class="opt" data-val="rolesor">Yellow Rolesor</button>
+            <button class="opt" data-val="everose">18 ct Everose</button>
+          </div></div>
+        <div class="cfg-group"><label>Dial <output id="dialOut">Silver · +$0</output></label>
+          <div class="opt-row" data-opt="dial">
+            <button class="opt active" data-val="silver"><span class="swatch" style="background:radial-gradient(circle at 35% 30%,#fdfdfb,#b9b9b3)"></span>Silver</button>
+            <button class="opt" data-val="black"><span class="swatch" style="background:radial-gradient(circle at 35% 30%,#3a3f3c,#050607)"></span>Black</button>
+            <button class="opt" data-val="green"><span class="swatch" style="background:radial-gradient(circle at 35% 30%,#1f7a4d,#052e1c)"></span>Green</button>
+            <button class="opt" data-val="blue"><span class="swatch" style="background:radial-gradient(circle at 35% 30%,#3a6fd0,#071f52)"></span>Royal Blue</button>
+            <button class="opt" data-val="chocolate"><span class="swatch" style="background:radial-gradient(circle at 35% 30%,#7a5236,#241207)"></span>Chocolate</button>
+            <button class="opt" data-val="champagne"><span class="swatch" style="background:radial-gradient(circle at 35% 30%,#f3dfae,#9c7c46)"></span>Champagne</button>
+          </div></div>
+        <div class="cfg-group"><label>Bezel <output id="bezelOut">Smooth · +$0</output></label>
+          <div class="opt-row" data-opt="bezel">
+            <button class="opt active" data-val="smooth">Smooth</button>
+            <button class="opt" data-val="fluted">Fluted</button>
+          </div></div>
+        <div class="cfg-group"><label>Bracelet <output id="bracOut">Oyster · +$0</output></label>
+          <div class="opt-row" data-opt="bracelet">
+            <button class="opt active" data-val="oyster">Oyster</button>
+            <button class="opt" data-val="jubilee">Jubilee</button>
+            <button class="opt" data-val="president">President</button>
+          </div></div>
+        <div class="cfg-summary">
+          <p class="ref" id="cfgRef">REF. 126200-0001</p>
+          <div class="total"><span id="cfgPrice">$7,350</span><small>Indicative price<br>VAT included · Genève</small></div>
+          <p class="cfg-note">Every configuration is hand-finished and superlative-chronometer certified after casing.</p>
+          <div style="margin-top:22px;display:flex;gap:16px;flex-wrap:wrap">
+            <button class="btn gold" id="cfgReq">Request Appointment</button>
+            <button class="btn" id="cfgSave" style="border-color:rgba(231,206,147,.4);color:var(--gold-hi)">Save Design</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BOUTIQUES / BOOKING ============ -->
+<section class="boutiques wrap" id="boutiques">
+  <div class="sec-head">
+    <div>
+      <p class="eyebrow" data-rv>N°06 — Boutiques</p>
+      <h2 class="h-lg" data-rv style="--d:.1s">A fitting, by <em class="g">appointment.</em></h2>
+    </div>
+  </div>
+  <div class="bq-grid">
+    <div data-rv>
+      <ul class="bq-list">
+        <li><b>Genève — Flagship</b><span>Rue du Rhône 41, CH</span></li>
+        <li><b>London</b><span>87–135 Brompton Rd, UK</span></li>
+        <li><b>New York</b><span>665 Fifth Avenue, US</span></li>
+        <li><b>Dubai</b><span>Fashion Avenue, The Dubai Mall, AE</span></li>
+        <li><b>Tokyo</b><span>Namiki-dōri 7, Ginza, JP</span></li>
+      </ul>
+      <img src="https://picsum.photos/seed/rolex-boutique-interior/900/520" alt="Boutique interior" style="margin-top:34px;filter:saturate(.85)" loading="lazy">
+    </div>
+    <div data-rv style="--d:.15s">
+      <form class="form" id="bookForm" novalidate>
+        <fieldset>
+          <div class="field" id="fName"><label for="bName">Full Name</label><input id="bName" type="text" autocomplete="name" placeholder="Eleanor Whitmore"><span class="msg">Please enter your name.</span></div>
+          <div class="field" id="fEmail"><label for="bEmail">Email</label><input id="bEmail" type="email" autocomplete="email" placeholder="eleanor@example.com"><span class="msg">A valid email is required.</span></div>
+          <div class="f-row">
+            <div class="field"><label for="bCity">Boutique</label>
+              <select id="bCity"><option>Genève — Flagship</option><option>London</option><option>New York</option><option>Dubai</option><option>Tokyo</option></select></div>
+            <div class="field" id="fDate"><label for="bDate">Preferred Date</label><input id="bDate" type="date"><span class="msg">Choose a future date.</span></div>
+          </div>
+          <div class="field"><label for="bNote">Your Configuration (optional)</label><textarea id="bNote" placeholder="e.g. Datejust 36, green dial, jubilee bracelet"></textarea></div>
+          <button class="btn solid" type="submit" style="align-self:flex-start">Request Appointment</button>
+        </fieldset>
+      </form>
+      <div class="bq-success" id="bookSuccess">
+        <svg viewBox="0 0 64 64"><circle class="ok-c" cx="32" cy="32" r="30"/><path class="ok-t" d="M20 33 L29 42 L45 24"/></svg>
+        <h3>It would be an honour.</h3>
+        <p id="bookEcho">Your fitting request has been received. A concierge will confirm within one working day.</p>
+        <button class="btn" id="bookAgain">Make Another Request</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="ghost">Perpetual</div>
+  <div class="wrap foot-grid">
+    <div>
+      <a class="logo" href="#top" style="align-items:flex-start;color:var(--gold-hi)">
+        <svg><use href="#crown"/></svg><span class="word">ROLEX</span><span class="sub">GENÈVE</span>
+      </a>
+      <p style="margin-top:20px;font-size:13px;color:rgba(242,238,227,.6);max-width:34ch">The Maison will send a private letter four times a year — collections, heritage, and invitations.</p>
+      <form class="news" id="newsForm"><input type="email" id="newsInput" placeholder="your@email.com" aria-label="Email for newsletter"><button type="submit">JOIN →</button></form>
+    </div>
+    <div><h4>Collections</h4><a href="#collections">Submariner</a><a href="#collections">Cosmograph Daytona</a><a href="#collections">GMT-Master II</a><a href="#collections">Day-Date</a><a href="#collections">Datejust</a><a href="#collections">Oyster Perpetual</a></div>
+    <div><h4>Maison</h4><a href="#heritage">Heritage</a><a href="#materials">Materials</a><a href="#anatomy">Watchmaking</a><a href="#configurator">The Atelier</a><a href="#boutiques">Boutiques</a></div>
+    <div><h4>Services</h4><a href="#boutiques">Book a Fitting</a><a href="#">Servicing</a><a href="#">Authenticity</a><a href="#">Pressroom</a><a href="#">Careers</a></div>
+  </div>
+  <div class="wrap foot-base">
+    <span>© 2026 CONCEPT ATELIER — UNOFFICIAL DESIGN STUDY, NOT AFFILIATED WITH ROLEX SA</span>
+    <span>GENÈVE · LONDON · NEW YORK · DUBAI · TOKYO</span>
+    <span id="footYear">FRIDAY 25 SEPTEMBER 2026</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+const $=(s,c=document)=>c.querySelector(s), $$=(s,c=document)=>[...c.querySelectorAll(s)];
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ============ WATCH ENGINE ============ */
+const watches=[];
+function buildWatch(el){
+  el.innerHTML =
+    '<div class="w-case"></div><div class="w-bezel bz-fluted"></div><div class="w-crown"></div>'+
+    '<div class="w-dial"><div class="w-brand"><svg><use href="#crown"/></svg><span class="wm">ROLEX</span><span class="sm">OYSTER PERPETUAL<br>DATEJUST</span></div>'+
+    '<div class="w-date"></div></div>';
+  const dial=$('.w-dial',el);
+  for(let i=0;i<12;i++){ if(i===3) continue;
+    const m=document.createElement('span');
+    m.className='w-marker'+(i===0?' mk12':'');
+    m.style.setProperty('--a',(i*30)+'deg'); m.innerHTML='<i></i>'; dial.appendChild(m);
+  }
+  ['hour','min','sec'].forEach(h=>{
+    const w=document.createElement('div'); w.className='w-hand w-'+h+(h==='sec'?' w-sec':'');
+    w.innerHTML='<i></i>'+(h==='sec'?'<b></b>':''); dial.appendChild(w);
+  });
+  dial.insertAdjacentHTML('beforeend','<div class="w-cap"></div><div class="rotor"></div>');
+  watches.push({h:$('.w-hour',el),m:$('.w-min',el),s:$('.w-sec',el),d:$('.w-date',el)});
+}
+$$('[data-watch]').forEach(buildWatch);
+let lastDate=-1;
+function tick(){
+  const n=new Date(), ms=n.getMilliseconds(),
+        s=n.getSeconds()+(RM?0:ms/1000),
+        m=n.getMinutes()+s/60,
+        h=(n.getHours()%12)+m/60;
+  watches.forEach(w=>{
+    w.h.style.transform=`rotate(${h*30}deg)`;
+    w.m.style.transform=`rotate(${m*6}deg)`;
+    w.s.style.transform=`rotate(${s*6}deg)`;
+    if(n.getDate()!==lastDate){lastDate=n.getDate();w.d.textContent=n.getDate();}
+  });
+  if(RM) setTimeout(tick,1000); else requestAnimationFrame(tick);
+}
+tick();
+
+/* ============ TOASTS ============ */
+function toast(msg){
+  const t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+  $('#toasts').appendChild(t);
+  setTimeout(()=>{t.classList.add('out'); setTimeout(()=>t.remove(),420);},3200);
+}
+
+/* ============ HEADER / PROGRESS ============ */
+const head=$('#siteHead'); let lastY=0;
+addEventListener('scroll',()=>{
+  const y=scrollY, max=document.documentElement.scrollHeight-innerHeight;
+  $('#progress').style.width=(max>0? y/max*100:0)+'%';
+  head.classList.toggle('scrolled',y>40);
+  head.classList.toggle('hide',y>lastY&&y>420);
+  lastY=y;
+},{passive:true});
+
+/* ============ MENU ============ */
+const menu=$('#menu');
+function setMenu(open){
+  menu.classList.toggle('open',open); menu.setAttribute('aria-hidden',!open);
+  document.body.style.overflow=open?'hidden':'';
+}
+$('#menuBtn').addEventListener('click',()=>setMenu(true));
+$('#menuClose').addEventListener('click',()=>setMenu(false));
+$$('[data-close]').forEach(a=>a.addEventListener('click',()=>setMenu(false)));
+addEventListener('keydown',e=>{if(e.key==='Escape')setMenu(false);});
+
+/* ============ REVEALS ============ */
+const io=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){e.target.classList.add('in'); io.unobserve(e.target);}
+}),{threshold:.16,rootMargin:'0px 0px -6% 0px'});
+$$('[data-rv]').forEach(el=>io.observe(el));
+
+/* ============ SCRAMBLE ============ */
+const CHARS='ABCDEFGHIKLMNOPRSTUVXZ0123456789·';
+function scramble(el){
+  const txt=el.textContent; let f=0; const total=Math.max(24,txt.length+10);
+  const iv=setInterval(()=>{
+    f++;
+    el.textContent=txt.split('').map((c,i)=> c===' '||c==='·'?c : (i< f/total*txt.length? c : CHARS[Math.random()*CHARS.length|0])).join('');
+    if(f>=total){el.textContent=txt;clearInterval(iv);}
+  },34);
+}
+const sio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting){ if(!RM) scramble(e.target); sio.unobserve(e.target);}
+}),{threshold:.6});
+$$('[data-scramble]').forEach(el=>sio.observe(el));
+
+/* ============ COUNTERS ============ */
+const cio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return; cio.unobserve(e.target);
+  const el=e.target, target=parseFloat(el.dataset.count), dec=+(el.dataset.dec||0), dur=RM?1:1500, t0=performance.now();
+  (function step(t){
+    const p=Math.min(1,(t-t0)/dur), ease=1-Math.pow(1-p,3), v=target*ease;
+    el.textContent=dec? v.toFixed(dec) : Math.round(v).toLocaleString('en-US');
+    if(p<1)requestAnimationFrame(step);
+  })(t0);
+}),{threshold:.6});
+$$('[data-count]').forEach(el=>cio.observe(el));
+
+/* ============ HERO PARALLAX CHIPS ============ */
+if(!RM){
+  const stage=$('#heroStage');
+  stage.addEventListener('mousemove',e=>{
+    const r=stage.getBoundingClientRect(),
+          x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+    $$('.chip',stage).forEach(c=>{
+      const d=+c.dataset.depth;
+      c.style.transform=`translate(${x*d}px,${y*d}px)`;
+    });
+  });
+}
+
+/* ============ COLLECTION FILTER + WISHLIST ============ */
+const wish=new Set(), wCount=$('#wishCount');
+$$('.wish').forEach(b=>b.addEventListener('click',e=>{
+  e.preventDefault();
+  const id=b.dataset.wish;
+  if(wish.has(id)){wish.delete(id);b.classList.remove('active');toast(`${id} removed from wishlist`);}
+  else{wish.add(id);b.classList.add('active');toast(`${id} added to your wishlist ✦`);}
+  wCount.textContent=wish.size;
+  wCount.classList.remove('pop'); void wCount.offsetWidth; wCount.classList.add('pop');
+}));
+$('#filterTabs').addEventListener('click',e=>{
+  const btn=e.target.closest('button'); if(!btn)return;
+  $$('#filterTabs button').forEach(b=>b.setAttribute('aria-pressed',b===btn));
+  const f=btn.dataset.filter;
+  $$('.card',$('#collGrid')).forEach((c,i)=>{
+    const show=f==='all'||c.dataset.cat===f;
+    c.classList.toggle('hidden',!show);
+    if(show){c.classList.remove('pop-in');void c.offsetWidth;c.style.animationDelay=(i*.05)+'s';c.classList.add('pop-in');}
+  });
+});
+
+/* ============ ANATOMY STEPS ============ */
+const FOCI=[
+  {x:50,y:50,r:104,name:'Oystersteel Case'},
+  {x:50,y:50,r:82, name:'Fluted Bezel'},
+  {x:76,y:50,r:22, name:'Cyclops Date Lens'},
+  {x:101,y:50,r:18,name:'Triplock Crown'},
+  {x:50,y:50,r:48, name:'Perpetual Movement'}
+];
+const ring=$('#focusRing'), steps=$$('.step',$('#anatSteps'));
+function setFocus(i){
+  const f=FOCI[i];
+  ring.style.width=f.r+'%'; ring.style.height=f.r+'%';
+  ring.style.left=(f.x-f.r/2)+'%'; ring.style.top=(f.y-f.r/2)+'%';
+  $('#anatIdx').textContent='0'+(i+1);
+  $('#focusName').textContent=f.name;
+  steps.forEach((s,j)=>s.classList.toggle('active',j===i));
+  if(i===4&&!RM){const rot=$('.rotor',$('#anatWatch'));rot.classList.remove('spin');void rot.offsetWidth;rot.classList.add('spin');}
+}
+setFocus(0);
+const aio=new IntersectionObserver(es=>es.forEach(e=>{
+  if(e.isIntersecting)setFocus(+e.target.dataset.step);
+}),{rootMargin:'-42% 0px -42% 0px'});
+steps.forEach(s=>aio.observe(s));
+
+/* ============ MATERIALS ============ */
+const MATS={
+  steel:{n:'Oystersteel',g:'linear-gradient(135deg,#F4F2EA 0%,#9BA29E 30%,#FFFFFF 48%,#7E8783 70%,#DDE2DF 100%)',d:'An exclusive superalloy of the 904L family, used in aerospace and chemistry. Exceptionally corrosion-resistant, it takes a mirror polish that holds for generations.'},
+  yellow:{n:'18 ct Yellow Gold',g:'linear-gradient(135deg,#FFF0BE 0%,#E4B95A 28%,#FFF6D4 48%,#8F6A1E 72%,#F3D383 100%)',d:'Cast in Rolex\u2019s own foundry from a secret alloy of gold, silver and copper. Warm, dense, and unmistakably Geneva.'},
+  everose:{n:'18 ct Everose Gold',g:'linear-gradient(135deg,#FFDCC8 0%,#D98E6B 30%,#FFE9DC 50%,#96513A 74%,#EDB79C 100%)',d:'Rolex\u2019s exclusive rose-gold alloy, tempered with a whisper of platinum so its blush never fades — even after decades against the skin.'},
+  white:{n:'18 ct White Gold',g:'linear-gradient(135deg,#FFFFFF 0%,#C4CBD2 30%,#F5F7F9 48%,#8D97A0 72%,#E3E8EC 100%)',d:'The quiet luxury. Indistinguishable to the casual eye, unmistakable to its owner — a bright alloy finished with rhodium-chrome brilliance.'},
+  rolesor:{n:'Rolesor',g:'linear-gradient(100deg,#DDE2DF 0%,#E8C56F 34%,#FFF3C8 50%,#B08A2E 66%,#9BA29E 100%)',d:'The meeting of Oystersteel and gold on a single bracelet — a signature of the Maison since 1933, when the name itself was trademarked.'}
+};
+const swatch=$('#matSwatch');
+swatch.style.background=MATS.steel.g; $('#matDesc').textContent=MATS.steel.d;
+$('#matTabs').addEventListener('click',e=>{
+  const btn=e.target.closest('button'); if(!btn)return;
+  $$('#matTabs button').forEach(b=>b.classList.toggle('active',b===btn));
+  const m=MATS[btn.dataset.mat];
+  swatch.classList.add('fade');
+  setTimeout(()=>{swatch.style.background=m.g;swatch.classList.remove('fade');},RM?0:320);
+  $('#matName').textContent=m.n; $('#matDesc').textContent=m.d;
+});
+
+/* ============ TIMELINE ============ */
+const track=$('#tlTrack'), bar=$('#tlBar');
+function tlUpdate(){
+  const max=track.scrollWidth-track.clientWidth;
+  bar.style.width=Math.max(6,(track.scrollLeft/max)*100||6)+'%';
+}
+track.addEventListener('scroll',tlUpdate,{passive:true});
+$('#tlPrev').addEventListener('click',()=>track.scrollBy({left:-430,behavior:RM?'auto':'smooth'}));
+$('#tlNext').addEventListener('click',()=>track.scrollBy({left:430,behavior:RM?'auto':'smooth'}));
+let drag=false,sx=0,sl=0;
+track.addEventListener('pointerdown',e=>{drag=true;sx=e.clientX;sl=track.scrollLeft;track.classList.add('drag');track.setPointerCapture(e.pointerId);});
+track.addEventListener('pointermove',e=>{if(drag)track.scrollLeft=sl-(e.clientX-sx);});
+['pointerup','pointercancel'].forEach(ev=>track.addEventListener(ev,()=>{drag=false;track.classList.remove('drag');}));
+tlUpdate();
+
+/* ============ CONFIGURATOR ============ */
+const cfg={case:'steel',dial:'silver',bezel:'smooth',bracelet:'oyster'};
+const PRICE={base:7350,case:{steel:0,rolesor:3900,everose:18500},bezel:{smooth:0,fluted:700},bracelet:{oyster:0,jubilee:380,president:2950}};
+const DIALS={
+  silver:{hi:'#FDFDFB',b:'#D9D9D4',lo:'#9FA09A',ink:'#20241F',light:1},
+  black:{hi:'#3A3F3C',b:'#15181A',lo:'#050607',ink:'#EDE7D5'},
+  green:{hi:'#20865A',b:'#0B5132',lo:'#04301D',ink:'#F0EAD8'},
+  blue:{hi:'#3A6FD0',b:'#123C8F',lo:'#071F52',ink:'#EEE8D8'},
+  chocolate:{hi:'#7A5236',b:'#4C2F1C',lo:'#241207',ink:'#F0E6D2'},
+  champagne:{hi:'#F3DFAE',b:'#D8BA7F',lo:'#9C7C46',ink:'#3C2F18',light:1}
+};
+const CASES={steel:'mat-steel',rolesor:'mat-gold',everose:'mat-everose'};
+const cfgWatch=$('#cfgWatch'), cfgBrac=$('#cfgBracelet'), preview=$('#cfgPreview');
+let curPrice=PRICE.base;
+function renderCfg(pulse=true){
+  const d=DIALS[cfg.dial];
+  cfgWatch.style.setProperty('--d-hi',d.hi);cfgWatch.style.setProperty('--d',d.b);
+  cfgWatch.style.setProperty('--d-lo',d.lo);cfgWatch.style.setProperty('--d-ink',d.ink);
+  const lum=d.light?'#8A6D2A':'#FFF7E0', lum2=d.light?'#C9A558':'#D8C08A';
+  cfgWatch.style.setProperty('--lum',lum);cfgWatch.style.setProperty('--lum2',lum2);
+  Object.keys(CASES).forEach(k=>{cfgWatch.classList.toggle(CASES[k],cfg.case===k);cfgBrac.classList.toggle(CASES[k],cfg.case===k);});
+  $('.w-bezel',cfgWatch).className='w-bezel bz-'+cfg.bezel;
+  cfgBrac.className='bracelet b-'+cfg.bracelet+' '+CASES[cfg.case];
+  const total=PRICE.base+PRICE.case[cfg.case]+PRICE.bezel[cfg.bezel]+PRICE.bracelet[cfg.bracelet];
+  $('#caseOut').textContent=({steel:'Oystersteel',rolesor:'Yellow Rolesor',everose:'18 ct Everose'})[cfg.case]+' · +$'+PRICE.case[cfg.case].toLocaleString();
+  $('#dialOut').textContent=cfg.dial[0].toUpperCase()+cfg.dial.slice(1)+' · +$0';
+  $('#bezelOut').textContent=(cfg.bezel==='fluted'?'Fluted':'Smooth')+' · +$'+PRICE.bezel[cfg.bezel];
+  $('#bracOut').textContent=cfg.bracelet[0].toUpperCase()+cfg.bracelet.slice(1)+' · +$'+PRICE.bracelet[cfg.bracelet];
+  $('#cfgRef').textContent='REF. 126'+({steel:'200',rolesor:'203',everose:'205'})[cfg.case]+'-'+({silver:'0001',black:'0002',green:'0003',blue:'0004',chocolate:'0005',champagne:'0006'})[cfg.dial];
+  // tween price
+  const el=$('#cfgPrice'), from=curPrice, t0=performance.now(), dur=RM?1:520;
+  (function step(t){const p=Math.min(1,(t-t0)/dur),v=Math.round(from+(total-from)*(1-Math.pow(1-p,3)));
+    el.textContent='$'+v.toLocaleString(); if(p<1)requestAnimationFrame(step);})(t0);
+  curPrice=total;
+  if(pulse&&!RM){preview.classList.remove('pulse');void preview.offsetWidth;preview.classList.add('pulse');}
+}
+$$('.opt-row').forEach(row=>row.addEventListener('click',e=>{
+  const b=e.target.closest('.opt'); if(!b)return;
+  $$('.opt',row).forEach(o=>o.classList.toggle('active',o===b));
+  cfg[row.dataset.opt]=b.dataset.val; renderCfg();
+}));
+renderCfg(false);
+$('#cfgReq').addEventListener('click',()=>{
+  const txt=`${$('#cfgRef').textContent} · ${cfg.case} case · ${cfg.dial} dial · ${cfg.bezel} bezel · ${cfg.bracelet} bracelet`;
+  $('#bNote').value=txt;
+  document.getElementById('boutiques').scrollIntoView({behavior:RM?'auto':'smooth'});
+  toast('Configuration transferred to your fitting request ✦');
+});
+$('#cfgSave').addEventListener('click',()=>{
+  wish.add('Atelier Configuration'); wCount.textContent=wish.size;
+  wCount.classList.remove('pop');void wCount.offsetWidth;wCount.classList.add('pop');
+  toast('Your Atelier design has been saved ✦');
+});
+
+/* ============ BOOKING FORM ============ */
+const today=new Date().toISOString().split('T')[0]; $('#bDate').min=today;
+$('#bookForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  let ok=true;
+  const name=$('#bName'),email=$('#bEmail'),date=$('#bDate');
+  const flag=(id,bad)=>{$('#'+id).classList.toggle('err',bad); if(bad)ok=false;};
+  flag('fName',name.value.trim().length<2);
+  flag('fEmail',!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value));
+  flag('fDate',!date.value||date.value<today);
+  if(!ok){toast('Please complete the highlighted fields.');return;}
+  $('#bookEcho').textContent=`Thank you, ${name.value.split(' ')[0]}. Your fitting at ${$('#bCity').value} on ${date.value} is being arranged. A confirmation will reach ${email.value} within one working day.`;
+  $('#bookForm').style.display='none'; $('#bookSuccess').classList.add('show');
+});
+$('#bookAgain').addEventListener('click',()=>{
+  $('#bookSuccess').classList.remove('show'); $('#bookForm').style.display=''; $('#bookForm').reset();
+});
+
+/* ============ NEWSLETTER ============ */
+$('#newsForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const v=$('#newsInput').value;
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){toast('Please enter a valid email address.');return;}
+  $('#newsInput').value=''; toast('Welcome to the Maison\u2019s private circle ✦');
+});
+
+/* ============ CUSTOM CURSOR ============ */
+if(matchMedia('(pointer:fine)').matches && !RM){
+  document.body.classList.add('has-cursor');
+  const dot=$('#cDot'),ring=$('#cRing'); let mx=innerWidth/2,my=innerHeight/2,rx=mx,ry=my;
+  addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';});
+  (function loop(){rx+=(mx-rx)*.16;ry+=(my-ry)*.16;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
+  document.addEventListener('mouseover',e=>{
+    ring.classList.toggle('hov',!!e.target.closest('a,button,input,select,textarea,.card-media'));
+  });
+}
+
+/* footer date */
+$('#footYear').textContent=new Date().toLocaleDateString('en-GB',{weekday:'long',day:'2-digit',month:'long',year:'numeric'}).toUpperCase();
+})();
+</script>
+</body>
+</html>
